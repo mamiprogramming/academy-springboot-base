@@ -1,12 +1,25 @@
+# 1. ビルドステージ
+FROM eclipse-temurin:17 AS builder
+
+WORKDIR /app
+
+# gradleラッパーとソースを全部コピー
+COPY gradlew .
+COPY gradle ./gradle
+COPY build.gradle .
+COPY settings.gradle .
+COPY src ./src
+
+# ビルド実行（必要に応じて ./gradlew build --no-daemon --stacktrace など）
+RUN ./gradlew build --no-daemon
+
+# 2. 実行ステージ
 FROM eclipse-temurin:17
 
 WORKDIR /app
 
-# ビルド済みのJARファイルをイメージにコピー
-COPY build/libs/spring-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /app/build/libs/spring-0.0.1-SNAPSHOT.jar app.jar
 
-# アプリケーション実行コマンド
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
-# 使用ポートを指定（Renderなどクラウド環境で必要）
 EXPOSE 8080
