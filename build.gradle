@@ -44,10 +44,7 @@ jar {
 }
 
 bootJar {
-	archiveBaseName = "spring"
-	version = "0.0.1"
-	archiveClassifier = 'SNAPSHOT'
-	archiveExtension = 'jar'
+    archiveFileName = 'app.jar'
 }
 
 bootRun {
