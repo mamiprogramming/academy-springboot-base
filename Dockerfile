@@ -1,4 +1,3 @@
-# ビルドステージ
 FROM eclipse-temurin:17 AS builder
 
 WORKDIR /app
@@ -11,13 +10,12 @@ COPY src ./src
 
 RUN ./gradlew bootJar --no-daemon
 
-# 実行ステージ
 FROM eclipse-temurin:17
 
 WORKDIR /app
 
 COPY --from=builder /app/build/libs/app.jar app.jar
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
-
 EXPOSE 8080
+
+ENTRYPOINT ["sh", "-c", "java -Dserver.port=$PORT -jar app.jar"]
