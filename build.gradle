@@ -43,13 +43,10 @@ jar {
 }
 
 bootJar {
-	archiveBaseName = "spring"
-	version = "0.0.1"
-	archiveClassifier = 'SNAPSHOT'
-	archiveExtension = 'jar'
+    archiveFileName = 'app.jar'
 }
 
 bootRun {
 	systemProperties = System.properties
-	jvmArgs=["-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5050"]
+	//jvmArgs=["-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5050"]
 }
