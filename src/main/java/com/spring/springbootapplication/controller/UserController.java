@@ -44,4 +44,10 @@ public class UserController {
     public String showTopPage() {
         return "top"; // templates/top.html を表示
     }
+
+    // 追加：ルートURLへのマッピング
+    @GetMapping("/")
+    public String rootRedirect() {
+        return "redirect:/top"; // "/" にアクセスしたら "/top" にリダイレクト
+    }
 }
