@@ -1,6 +1,6 @@
 package com.spring.springbootapplication.controller;
 
-import com.spring.app.form.UserForm;
+import com.spring.springbootapplication.form.UserForm;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
