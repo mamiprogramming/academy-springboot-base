@@ -1,4 +1,4 @@
-package com.spring.app.controller;
+package com.spring.springbootapplication.controller;
 
 import com.spring.app.form.UserForm;
 import jakarta.validation.Valid;
