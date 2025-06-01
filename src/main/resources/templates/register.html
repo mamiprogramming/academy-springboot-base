@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ユーザー登録</title>
+  <!-- Bootstrap 5 CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5" style="max-width: 480px;">
+  <h2 class="mb-4 text-center">ユーザー登録</h2>
+
+  <!-- 登録フォーム -->
+  <form th:action="@{/register}" th:object="${userForm}" method="post">
+    <!-- CSRFトークンは th:action で自動出力されます -->
+
+    <!-- 氏名 -->
+    <div class="mb-3">
+      <label for="name" class="form-label">氏名</label>
+      <input type="text" id="name" th:field="*{name}" class="form-control"
+             placeholder="例）山田 太郎">
+      <div th:if="${#fields.hasErrors('name')}" class="text-danger small"
+           th:errors="*{name}">氏名エラー</div>
+    </div>
+
+    <!-- メールアドレス -->
+    <div class="mb-3">
+      <label for="email" class="form-label">メールアドレス</label>
+      <input type="email" id="email" th:field="*{email}" class="form-control"
+             placeholder="example@example.com">
+      <div th:if="${#fields.hasErrors('email')}" class="text-danger small"
+           th:errors="*{email}">メールアドレスエラー</div>
+    </div>
+
+    <!-- パスワード -->
+    <div class="mb-4">
+      <label for="password" class="form-label">パスワード</label>
+      <input type="password" id="password" th:field="*{password}" class="form-control"
+             placeholder="英数字8文字以上">
+      <div th:if="${#fields.hasErrors('password')}" class="text-danger small"
+           th:errors="*{password}">パスワードエラー</div>
+    </div>
+
+    <div class="d-grid">
+      <button type="submit" class="btn btn-primary">登録</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>
