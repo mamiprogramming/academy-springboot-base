@@ -2,6 +2,15 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.4'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.flywaydb.flyway' version '9.21.1'
+}
+
+flyway {
+    url = 'jdbc:postgresql://aws-0-ap-northeast-1.pooler.supabase.com:5432/postgres?sslmode=require'
+    user = 'postgres.kxwyldmrucpzashxjvlp'
+    password = 'admin_9876'
+    cleanDisabled = false // ← 追加
+		locations = ['classpath:db/migration'] // ← 追加
 }
 
 group = 'com.spring'
@@ -50,4 +59,16 @@ bootJar {
 bootRun {
 	systemProperties = System.properties
 	//jvmArgs=["-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5050"]
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/resources'
+        }
+    }
+}
+
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
