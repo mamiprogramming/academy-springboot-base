@@ -1,7 +1,10 @@
 package com.spring.springbootapplication.controller;
 
 import com.spring.springbootapplication.form.UserForm;
+import com.spring.springbootapplication.domain.User;
+import com.spring.springbootapplication.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class UserController {
+
+    @Autowired
+    private UserService userService;
 
     // 登録フォームを表示
     @GetMapping("/register")
@@ -31,7 +37,11 @@ public class UserController {
             return "register";
         }
 
-        // TODO: ユーザーのDB保存処理をここで行う
+        // UserForm → User に変換
+        User user = toEntity(userForm);
+
+        // DB保存処理（UserServiceを呼ぶ）
+        userService.registerUser(user);
 
         // TODO: セッションにログイン状態を保存する
 
@@ -39,15 +49,24 @@ public class UserController {
         return "redirect:/top";
     }
 
-    //簡易トップページへの遷移
+    // 簡易トップページへの遷移
     @GetMapping("/top")
     public String showTopPage() {
         return "top"; // templates/top.html を表示
     }
 
-    // 追加：ルートURLへのマッピング
+    // ルートURLへのマッピング（/ → /top へリダイレクト）
     @GetMapping("/")
     public String rootRedirect() {
-        return "redirect:/top"; // "/" にアクセスしたら "/top" にリダイレクト
+        return "redirect:/top";
+    }
+
+    // UserForm → User 変換メソッド
+    private User toEntity(UserForm form) {
+        User user = new User();
+        user.setName(form.getName());
+        user.setEmail(form.getEmail());
+        user.setPassword(form.getPassword()); // ここでパスワードハッシュ化も行うべき（TODO）
+        return user;
     }
 }
