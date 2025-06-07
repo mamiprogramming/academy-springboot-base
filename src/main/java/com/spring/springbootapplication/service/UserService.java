@@ -1,7 +1,7 @@
 package com.spring.springbootapplication.service;
 
-import com.spring.springbootapplication.domain.User;
-import com.spring.springbootapplication.mapper.UserMapper;
+import com.spring.springbootapplication.entity.User;
+import com.spring.springbootapplication.dao.UserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,4 +1,4 @@
-package com.spring.springbootapplication.form;
+package com.spring.springbootapplication.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
