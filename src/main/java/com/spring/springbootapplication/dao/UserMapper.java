@@ -1,6 +1,6 @@
-package com.spring.springbootapplication.mapper;
+package com.spring.springbootapplication.dao;
 
-import com.spring.springbootapplication.domain.User;
+import com.spring.springbootapplication.entity.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 

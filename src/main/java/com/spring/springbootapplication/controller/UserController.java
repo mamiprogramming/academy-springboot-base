@@ -1,7 +1,7 @@
 package com.spring.springbootapplication.controller;
 
-import com.spring.springbootapplication.form.UserForm;
-import com.spring.springbootapplication.domain.User;
+import com.spring.springbootapplication.dto.UserForm;
+import com.spring.springbootapplication.entity.User;
 import com.spring.springbootapplication.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
