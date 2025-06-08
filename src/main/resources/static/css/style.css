@@ -1,39 +1,25 @@
+/* 全体のHTMLとbody設定 */
 html, body {
   height: 100%;
   margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   min-width: 320px; /* スマホ対応 */
   font-family: 'Roboto', sans-serif;
-}
-
-/* メインコンテンツ領域 */
-.container {
-  flex: 1;
-  width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-/* ヘッダー・フッター共通レイアウト */
-.navbar-custom,
-.footer-custom {
-  width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  box-sizing: border-box;
-  padding: 0 40px;
-  display: flex;
-  align-items: center;
+  background-color: #fff;
 }
 
 /* ヘッダー */
 .navbar-custom {
   height: 120px;
   background-color: #1B5678;
-  justify-content: space-between;  /* ヘッダーは左右配置 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ロゴテキスト */
@@ -46,12 +32,34 @@ html, body {
   text-decoration: none;
 }
 
+/* メインコンテンツ */
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+  min-height: 0; /* ← 追加：flex項目の高さが崩れないように */
+}
+
+/* 登録フォームラップ */
+.container {
+  width: 100%;
+  max-width: 480px;
+  box-sizing: border-box;
+}
+
 /* フッター */
 .footer-custom {
   height: 40px;
   background-color: #1B5678;
   color: #FFFFFF;
-  justify-content: center;  /* フッターは中央寄せ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 40px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 /* フッター内テキスト */
@@ -63,20 +71,29 @@ html, body {
   color: #FFFFFF;
 }
 
-.button_white {
+/* 登録・ログインボタン共通 */
+.button_white,
+.login-button {
   width: 152px;
   height: 53px;
-  padding: 16px 40px; /* 上下16px、左右40px */
+  padding: 16px 40px;
   border-radius: 4px;
-  background-color: #FFFFFF;
-  color: #1B5678;            /* 文字色は紺色で統一 */
-  border: 2px solid #1B5678; /* 紺色の枠線 */
-  font-weight: 700;
   font-size: 16px;
   cursor: pointer;
-  box-sizing: border-box;   /* padding含めてサイズ計算 */
+  box-sizing: border-box;
   transition: background-color 0.3s ease, color 0.3s ease;
-  margin-left: 20px; /* ← ここを追加 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 登録（白）ボタン */
+.button_white {
+  background-color: #FFFFFF;
+  color: #1B5678;
+  border: 2px solid #1B5678;
+  font-weight: 700;
+  margin-left: 20px;
 }
 
 .button_white:hover {
@@ -84,27 +101,11 @@ html, body {
   color: #FFFFFF;
 }
 
+/* ログイン（白背景）ボタン */
 .login-button {
-  width: 152px;
-  height: 53px;
-  padding: 16px 40px;              /* 上下16px、左右40px */
-  border-radius: 4px;
-  background: #FFFFFF;             /* ボタン全体の背景 */
+  background-color: #FFFFFF;
   border: none;
-  cursor: pointer;
-  box-sizing: border-box;
-
-  /* テキスト（中身）の指定 */
-  font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-size: 18px;
-  line-height: 1;                  /* 100% = 1 */
-  letter-spacing: 0;
-  color: #000000;                  /* 黒文字、指定なければ白で変更可 */
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  transition: background-color 0.3s ease, color 0.3s ease;
+  color: #000000;
 }
