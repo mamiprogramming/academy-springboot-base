@@ -1,6 +1,5 @@
 package com.spring.springbootapplication.dto;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -13,7 +12,11 @@ public class UserForm {
 
     @NotBlank(message = "メールアドレスは必ず入力してください")
     @Size(max = 255, message = "メールアドレスは255文字以内で入力してください")
-    @Email(message = "メールアドレスが正しい形式ではありません")
+    @Pattern(
+        regexp = "^[\\x00-\\x7F]+$",
+        message = "メールアドレスが正しい形式ではありません"
+    )
+    @jakarta.validation.constraints.Email(message = "メールアドレスが正しい形式ではありません")
     private String email;
 
     @NotBlank(message = "パスワードは必ず入力してください")
