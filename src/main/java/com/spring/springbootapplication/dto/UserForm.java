@@ -3,7 +3,6 @@ package com.spring.springbootapplication.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.Email;
 
 public class UserForm {
 
@@ -17,7 +16,6 @@ public class UserForm {
         regexp = "^[\\x00-\\x7F]+$",
         message = "メールアドレスが正しい形式ではありません"
     )
-    @Email(message = "メールアドレスが正しい形式ではありません")
     private String email;
 
     @NotBlank(message = "パスワードは必ず入力してください")
