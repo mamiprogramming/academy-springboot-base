@@ -1,21 +1,23 @@
 <div class="container mt-5">
   <h2 class="mb-4">ログイン</h2>
 
-  <form th:action="@{/login}" method="post">
-      <!-- Flash属性のエラーメッセージ表示 -->
-      <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+  <form th:action="@{/login}" method="post" th:object="${loginForm}">
+    <!-- Flash属性のエラーメッセージ表示 -->
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
-      <div class="mb-3">
-          <label for="email" class="form-label">メールアドレス</label>
-          <input type="email" class="form-control" id="email" name="email" placeholder="メールアドレスを入力" required />
-      </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">メールアドレス</label>
+      <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="メールアドレスを入力" />
+      <div th:if="${#fields.hasErrors('email')}" class="text-danger" th:errors="*{email}"></div>
+    </div>
 
-      <div class="mb-3">
-          <label for="password" class="form-label">パスワード</label>
-          <input type="password" class="form-control" id="password" name="password" placeholder="パスワードを入力" required />
-      </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">パスワード</label>
+      <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="パスワードを入力" />
+      <div th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}"></div>
+    </div>
 
-      <button type="submit" class="btn btn-primary">ログインする</button>
+    <button type="submit" class="btn btn-primary">ログインする</button>
   </form>
 
   <a href="/register" class="btn btn-secondary mt-3">新規登録する</a>
