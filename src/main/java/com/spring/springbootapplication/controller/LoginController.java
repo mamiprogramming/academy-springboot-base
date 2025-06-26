@@ -22,6 +22,7 @@ public class LoginController {
     @GetMapping("/login")
     public String showLoginForm(Model model) {
         model.addAttribute("loginForm", new LoginForm());
+        model.addAttribute("isLoginPage", true); // ログイン画面フラグ
         return "login";
     }
 
@@ -32,6 +33,9 @@ public class LoginController {
             HttpSession session,
             Model model) {
 
+        model.addAttribute("isLoginPage", true); // POST時も必要
+
+        // 入力バリデーションエラーがあればログイン画面に戻す
         if (bindingResult.hasErrors()) {
             return "login";
         }

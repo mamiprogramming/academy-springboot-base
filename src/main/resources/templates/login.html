@@ -1,24 +1,69 @@
-<div class="container mt-5">
-  <h2 class="mb-4">ログイン</h2>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 
-  <form th:action="@{/login}" method="post" th:object="${loginForm}">
-    <!-- Flash属性のエラーメッセージ表示 -->
-    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+<head>
+  <meta charset="UTF-8" />
+  <title>ログイン</title>
 
-    <div class="mb-3">
-      <label for="email" class="form-label">メールアドレス</label>
-      <input type="email" class="form-control" id="email" th:field="*{email}" placeholder="メールアドレスを入力" />
-      <div th:if="${#fields.hasErrors('email')}" class="text-danger" th:errors="*{email}"></div>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+  <!-- 新規登録用CSS -->
+  <link rel="stylesheet" th:href="@{/css/register.css}" />
+</head>
+
+<body style="min-height: 100vh; margin: 0; display: flex; flex-direction: column;">
+
+  <!-- ヘッダー -->
+  <header th:replace="common/header :: header"></header>
+
+  <!-- メイン -->
+  <main class="flex-grow-1 d-flex justify-content-center align-items-start py-5">
+    <div class="container" style="max-width: 480px;">
+      <h2 class="text-center mb-4" style="font-weight: 400; font-size: 36px; color: black;">ログイン</h2>
+
+      <form th:action="@{/login}" method="post" novalidate>
+
+        <!-- Flash属性のエラーメッセージ表示 -->
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label" style="font-weight: 400; font-size: 12px; color: rgba(0, 0, 0, 0.54);">メールアドレス</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="メールアドレスを入力" required
+            style="border:none; border-bottom:1px solid #000; border-radius:0; background-color:transparent; box-shadow:none; outline:none;" />
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label" style="font-weight: 400; font-size: 12px; color: rgba(0, 0, 0, 0.54);">パスワード</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="パスワードを入力" required
+            style="border:none; border-bottom:1px solid #000; border-radius:0; background-color:transparent; box-shadow:none; outline:none;" />
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <button type="submit" class="login-button" style="width:232px; height:53px; border-radius:4px; background:#FFFFFF; border:none; font-weight:400; font-size:18px; color:#000; cursor:pointer;">
+            ログインする
+          </button>
+        </div>
+      </form>
+
+      <div class="d-flex justify-content-center mt-3">
+        <a href="/register" class="button_white" style="width:152px; height:53px; padding:16px 40px; border-radius:4px; background:#FFFFFF; color:#1B5678; border:2px solid #1B5678; font-weight:700; display:flex; align-items:center; justify-content:center; text-decoration:none;">
+          新規登録する
+        </a>
+      </div>
     </div>
+  </main>
 
-    <div class="mb-3">
-      <label for="password" class="form-label">パスワード</label>
-      <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="パスワードを入力" />
-      <div th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}"></div>
-    </div>
+  <!-- フッター -->
+  <footer th:replace="common/footer :: footer"></footer>
 
-    <button type="submit" class="btn btn-primary">ログインする</button>
-  </form>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-  <a href="/register" class="btn btn-secondary mt-3">新規登録する</a>
-</div>
+</body>
+
+</html>
