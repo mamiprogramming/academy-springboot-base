@@ -4,11 +4,9 @@ import com.spring.springbootapplication.dto.LoginForm;
 import com.spring.springbootapplication.entity.User;
 import com.spring.springbootapplication.service.UserService;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,23 +20,19 @@ public class LoginController {
     @GetMapping("/login")
     public String showLoginForm(Model model) {
         model.addAttribute("loginForm", new LoginForm());
-        model.addAttribute("isLoginPage", true); // ログイン画面フラグ
+        model.addAttribute("isLoginPage", true);
         return "login";
     }
 
     @PostMapping("/login")
     public String login(
-            @Valid @ModelAttribute("loginForm") LoginForm loginForm,
-            BindingResult bindingResult,
+            @ModelAttribute("loginForm") LoginForm loginForm,
             HttpSession session,
             Model model) {
 
-        model.addAttribute("isLoginPage", true); // POST時も必要
+        model.addAttribute("isLoginPage", true);
 
-        // 入力バリデーションエラーがあればログイン画面に戻す
-        if (bindingResult.hasErrors()) {
-            return "login";
-        }
+        // 手動チェック（空チェックなど必要ならここで実装）
 
         User user = userService.findByEmail(loginForm.getEmail());
 
