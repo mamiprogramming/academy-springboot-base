@@ -49,12 +49,6 @@ public class UserController {
         return "redirect:/top";
     }
 
-    // 簡易トップページへの遷移
-    @GetMapping("/top")
-    public String showTopPage() {
-        return "top"; // templates/top.html を表示
-    }
-
     // ルートURLへのマッピング（/ → /top へリダイレクト）
     @GetMapping("/")
     public String rootRedirect() {

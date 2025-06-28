@@ -14,8 +14,14 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
+    // ユーザー登録
     @Transactional
     public void registerUser(User user) {
         userMapper.insertUser(user);
+    }
+
+    // ★ 追加：メールアドレスで検索
+    public User findByEmail(String email) {
+        return userMapper.findByEmail(email);
     }
 }
