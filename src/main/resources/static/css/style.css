@@ -65,12 +65,14 @@ main {
 
 /* ========== タイトル ========== */
 .register-title {
-  width: 100%;
+  width: 144px;
+  height: 48px;
   font-weight: 400;
   font-size: 36px;
   text-align: center;
   color: black;
-  margin-bottom: 32px;
+  margin: 36px auto 48px auto; /* 上は36px、下48px、自動で中央揃え */
+  line-height: 48px;        /* 垂直中央 */
 }
 
 /* ========== フォーム入力欄 ========== */
@@ -82,7 +84,7 @@ main {
   box-shadow: none;
   outline: none;
   font-size: 16px;
-  padding: 8px 0;
+  padding: 5px 0;
 }
 
 /* フォーム入力フォーカス時の枠線を無効化して色だけ変更 */
@@ -98,6 +100,8 @@ main {
   font-weight: 400;
   font-size: 12px;
   color: rgba(0, 0, 0, 0.54);
+  margin-bottom: 0;  /* 下の余白を減らす */
+  padding-top: 4px;    /* 文字を下げる */
 }
 
 /* ========== ボタン ========== */

@@ -26,14 +26,14 @@
       <form class="register-form" th:action="@{/register}" th:object="${userForm}" method="post" novalidate>
 
         <!-- 氏名 -->
-        <div class="form-group-name mb-3">
+        <div class="form-group-name mb-5">
           <label for="name" class="form-label">氏名</label>
           <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="例）山田 太郎" />
           <div th:if="${#fields.hasErrors('name')}" class="text-danger small" th:errors="*{name}"></div>
         </div>
 
         <!-- メールアドレス -->
-        <div class="form-group-email mb-3">
+        <div class="form-group-email mb-5">
           <label for="email" class="form-label">メールアドレス</label>
           <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="example@example.com" />
           <div th:if="${#fields.hasErrors('email')}" class="text-danger small" th:errors="*{email}"></div>
