@@ -3,6 +3,7 @@ package com.spring.springbootapplication.controller;
 import com.spring.springbootapplication.dto.UserForm;
 import com.spring.springbootapplication.entity.User;
 import com.spring.springbootapplication.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,8 @@ public class UserController {
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
         model.addAttribute("userForm", new UserForm());
-        return "register"; // templates/register.html を表示
+        model.addAttribute("isLoginPage", false); // ヘッダー用
+        return "register";
     }
 
     // 登録フォーム送信時
@@ -30,37 +32,39 @@ public class UserController {
     public String registerUser(
             @Valid @ModelAttribute("userForm") UserForm userForm,
             BindingResult bindingResult,
-            Model model) {
+            Model model,
+            HttpSession session) {
 
-        // バリデーションエラーがあれば戻す
         if (bindingResult.hasErrors()) {
+            model.addAttribute("isLoginPage", false); // ヘッダー用
             return "register";
         }
 
         // UserForm → User に変換
         User user = toEntity(userForm);
 
-        // DB保存処理（UserServiceを呼ぶ）
+        // DBに保存
         userService.registerUser(user);
 
-        // TODO: セッションにログイン状態を保存する
+        // セッションにログイン状態を保存
+        session.setAttribute("loginUser", user);
 
-        // 登録後、TOPページ（仮）へ遷移
+        // 登録後TOPページへ
         return "redirect:/top";
     }
 
-    // ルートURLへのマッピング（/ → /top へリダイレクト）
+    // ルートURLへのマッピング（/ → /topへ）
     @GetMapping("/")
     public String rootRedirect() {
         return "redirect:/top";
     }
 
-    // UserForm → User 変換メソッド
+    // UserForm→User変換
     private User toEntity(UserForm form) {
         User user = new User();
         user.setName(form.getName());
         user.setEmail(form.getEmail());
-        user.setPassword(form.getPassword()); // ここでパスワードハッシュ化も行うべき（TODO）
+        user.setPassword(form.getPassword()); // TODO: ハッシュ化
         return user;
     }
 }

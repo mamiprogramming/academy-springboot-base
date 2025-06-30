@@ -159,7 +159,6 @@ main {
 .login-button {
   width: 152px;
   height: 53px;
-  padding: 16px 40px;
   border-radius: 4px;
   background: #FFFFFF;
   border: none;
@@ -169,6 +168,11 @@ main {
   cursor: pointer;
   font-family: 'Roboto', sans-serif;
   line-height: 100%;
+  white-space: nowrap; /* テキストの改行禁止 */
+  display: flex; /* 縦横中央揃え用 */
+  align-items: center; /* 縦中央 */
+  justify-content: center; /* 横中央 */
+  padding: 0; /* パディングは不要、中央寄せに任せる */
   transition: none;
 }
 

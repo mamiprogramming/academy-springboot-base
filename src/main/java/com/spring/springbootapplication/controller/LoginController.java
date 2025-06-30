@@ -30,9 +30,7 @@ public class LoginController {
             HttpSession session,
             Model model) {
 
-        model.addAttribute("isLoginPage", true);
-
-        // 手動チェック（空チェックなど必要ならここで実装）
+        model.addAttribute("isLoginPage", true); // エラー時の画面制御のため
 
         User user = userService.findByEmail(loginForm.getEmail());
 

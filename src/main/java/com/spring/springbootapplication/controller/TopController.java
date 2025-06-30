@@ -12,6 +12,7 @@ public class TopController {
     public String showTopPage(Model model, HttpSession session) {
         Object loginUser = session.getAttribute("loginUser");
         model.addAttribute("loginUser", loginUser);
+        model.addAttribute("isLoginPage", false);
         return "top"; // resources/templates/top.html をレンダリング
     }
 }
