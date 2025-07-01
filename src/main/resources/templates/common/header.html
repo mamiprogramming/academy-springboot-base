@@ -1,20 +1,22 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" th:href="@{/css/style.css}" />
-  <title>共通ヘッダー</title>
-</head>
-<body>
-  <header th:fragment="header">
-    <nav class="navbar-custom"
-         th:classappend="${isLoginPage} ? ' justify-content-center' : ' justify-content-between'">
-      <div class="navbar-brand-custom">My Portfolio</div>
+<!-- templates/common/header.html -->
+<header th:fragment="header">
+  <nav class="navbar-custom"
+       th:classappend="${isLoginPage} ? ' justify-content-center' : ' justify-content-between'">
+    <div class="navbar-brand-custom">My Portfolio</div>
 
-      <!-- ログインページ以外でログインボタンを表示 -->
-      <button th:if="${isLoginPage != true}" class="login-button" onclick="location.href='/login'">ログイン</button>
-    </nav>
-  </header>
-</body>
-</html>
+    <!-- ログインページではログイン・ログアウトボタン非表示 -->
+    <th:block th:if="${!isLoginPage}">
+      <!-- 未ログインの場合ログインボタン -->
+      <th:block th:if="${session.loginUser == null}">
+        <button onclick="location.href='/login'" class="login-button">ログイン</button>
+      </th:block>
+
+      <!-- ログイン済みの場合ログアウトボタン -->
+      <th:block th:if="${session.loginUser != null}">
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+          <button type="submit" class="login-button">ログアウト</button>
+        </form>
+      </th:block>
+    </th:block>
+  </nav>
+</header>
