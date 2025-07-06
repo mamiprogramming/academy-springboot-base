@@ -17,11 +17,13 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    // ===========================
+    // 【開発用】ログイン画面をスキップしてTOPへ
+    // ===========================
     @GetMapping("/login")
     public String showLoginForm(Model model) {
-        model.addAttribute("loginForm", new LoginForm());
-        model.addAttribute("isLoginPage", true);
-        return "login";
+        // 無条件リダイレクト
+        return "redirect:/top";
     }
 
     @PostMapping("/login")
@@ -30,6 +32,20 @@ public class LoginController {
             HttpSession session,
             Model model) {
 
+        // ===========================
+        // 【開発用】ログインチェックもスキップ
+        // ===========================
+        User dummyUser = new User();
+        dummyUser.setId(1); // Integer
+        dummyUser.setEmail("dummy@example.com");
+        dummyUser.setPassword("dummy");
+        session.setAttribute("loginUser", dummyUser);
+        return "redirect:/top";
+
+        /*
+        // ===========================
+        // 【本番用】通常のログイン処理
+        // ===========================
         model.addAttribute("isLoginPage", true); // エラー時の画面制御のため
 
         User user = userService.findByEmail(loginForm.getEmail());
@@ -41,5 +57,6 @@ public class LoginController {
 
         session.setAttribute("loginUser", user);
         return "redirect:/top";
+        */
     }
 }

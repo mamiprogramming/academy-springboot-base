@@ -8,6 +8,9 @@ html, body {
   min-width: 320px;
   font-family: 'Roboto', sans-serif;
   background-color: #fff;
+
+  /* 全体の横スクロールは無しにしておく（必要なら追加可能） */
+  overflow-x: hidden;
 }
 
 /* ========== ヘッダー ========== */
@@ -19,7 +22,9 @@ html, body {
   justify-content: space-between;
   padding: 0 40px;
   width: 100%;
+  max-width: 1440px;
   box-sizing: border-box;
+  overflow-x: hidden; /* はみ出さない */
 }
 
 .navbar-brand-custom {
@@ -37,6 +42,7 @@ main {
   justify-content: center;
   padding: 40px 20px;
   box-sizing: border-box;
+  overflow-x: hidden; /* メインもはみ出し防止 */
 }
 
 .container {
@@ -55,6 +61,7 @@ main {
   justify-content: center;
   padding: 0 40px;
   width: 100%;
+  overflow-x: hidden; /* はみ出し防止 */
 }
 
 .footer-custom small {
@@ -71,8 +78,8 @@ main {
   font-size: 36px;
   text-align: center;
   color: black;
-  margin: 36px auto 48px auto; /* 上は36px、下48px、自動で中央揃え */
-  line-height: 48px;        /* 垂直中央 */
+  margin: 36px auto 48px auto;
+  line-height: 48px;
 }
 
 /* ========== フォーム入力欄 ========== */
@@ -87,12 +94,11 @@ main {
   padding: 5px 0;
 }
 
-/* フォーム入力フォーカス時の枠線を無効化して色だけ変更 */
 .form-control:focus {
-  background-color: transparent !important; /* 背景透明 */
-  border-color: #000 !important;            /* 黒い下線 */
-  box-shadow: none !important;              /* 青い影なし */
-  outline: none !important;                 /* フォーカス枠なし */
+  background-color: transparent !important;
+  border-color: #000 !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 /* ========== ラベル ========== */
@@ -100,12 +106,11 @@ main {
   font-weight: 400;
   font-size: 12px;
   color: rgba(0, 0, 0, 0.54);
-  margin-bottom: 0;  /* 下の余白を減らす */
-  padding-top: 4px;    /* 文字を下げる */
+  margin-bottom: 0;
+  padding-top: 4px;
 }
 
 /* ========== ボタン ========== */
-/* ログイン画面の2つの大きいボタン統一用 */
 .button_blue,
 .button_white {
   width: 268px;
@@ -118,28 +123,26 @@ main {
   font-family: 'Roboto', sans-serif;
   text-align: center;
   transition: background-color 0.3s ease, color 0.3s ease;
-  white-space: nowrap;   /* 1行表示 */
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   box-sizing: border-box;
 }
 
-/* ログインボタン（青） */
 .button_blue {
   background: #1B5678;
   color: white;
   border: none;
   display: inline-block;
-  text-decoration: none; 
+  text-decoration: none;
 }
 
 .button_blue:hover {
   background-color: #144a63;
   color: #fff;
-  text-decoration: none; /* アンダーライン防止 */
+  text-decoration: none;
 }
 
-/* 新規登録ボタン（白） */
 .button_white {
   background-color: #FFFFFF;
   color: #1B5678;
@@ -152,10 +155,9 @@ main {
 .button_white:hover {
   background-color: #1B5678;
   color: #FFFFFF;
-  text-decoration: none; /* アンダーライン防止 */
+  text-decoration: none;
 }
 
-/* ヘッダーのログインボタン（hover無効） */
 .login-button {
   width: 152px;
   height: 53px;
@@ -168,11 +170,11 @@ main {
   cursor: pointer;
   font-family: 'Roboto', sans-serif;
   line-height: 100%;
-  white-space: nowrap; /* テキストの改行禁止 */
-  display: flex; /* 縦横中央揃え用 */
-  align-items: center; /* 縦中央 */
-  justify-content: center; /* 横中央 */
-  padding: 0; /* パディングは不要、中央寄せに任せる */
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
   transition: none;
 }
 
@@ -199,4 +201,183 @@ main {
   display: grid;
   gap: 1rem;
   place-items: center;
+}
+
+/* ========== トップページ：自己紹介セクション ========== */
+.profile-section {
+  width: 100%;
+  max-width: 1440px;
+  height: 742px;
+  margin: 0 auto;
+  padding-top: 80px;
+  padding-bottom: 80px;
+  box-sizing: border-box;
+  position: relative;
+
+  overflow-x: auto; /* 横スクロール許可 */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* スクロール時にスクロールバーが見やすくなる調整（任意） */
+.profile-section::-webkit-scrollbar {
+  height: 8px;
+}
+
+.profile-section::-webkit-scrollbar-thumb {
+  background-color: rgba(27, 86, 120, 0.5);
+  border-radius: 4px;
+}
+
+/* 中ボックス */
+.profile-content {
+  width: 100%;
+  max-width: 960px;
+  height: 582px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background-color: #06f04c4d; /* 今だけ見える色 */
+  position: relative;
+}
+
+/* 自己紹介ボックス */
+.profile-intro {
+  width: 100%;
+  max-width: 960px;
+  height: 360px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  background-color: #067bf04d; /* 今だけ見える色 */
+  position: relative;
+  padding-left: 0;
+  padding-bottom: 0;
+}
+
+/* プロフィール画像 */
+.profile-image-wrapper {
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #C4C4C4;
+  flex-shrink: 0;
+}
+
+/* 自己紹介テキスト全体の親 */
+.intro-text {
+  margin-left: 20px;
+  flex-grow: 1;
+  position: relative;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #000;
+}
+
+/* 右側テキストとボタンの親ボックス */
+.profile-right-box {
+  position: absolute;
+  top: 52px;
+  left: 440px;
+  width: 520px;
+  height: 256px;
+  box-sizing: border-box;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 自己紹介見出し（左上） */
+.intro-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 58px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-left: 4px;
+  padding-top: 4px;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+}
+
+/* 自己紹介テキスト */
+.profile-right-box p {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #000;
+  margin: 0 0 40px 0;
+}
+
+/* 編集ボタン */
+button.button_blue.edit-button {
+  position: absolute;
+  top: 203px;
+  left: -2px;
+  width: 242px;
+  height: 53px;
+  padding-top: 16px;
+  padding-right: 40px;
+  padding-bottom: 16px;
+  padding-left: 40px;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #1B5678;
+  color: #FFFFFF;
+  border: none;
+
+  /* フォント指定 */
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0%;
+
+  transition: background-color 0.3s ease;
+}
+
+button.button_blue.edit-button:hover {
+  background-color: #144a63;
+}
+
+/* 自己紹介テキストボックス */
+.intro-middle-box {
+  position: absolute;
+  top: 90px;
+  left: 0;
+  width: 520px;
+  height: 81px;
+  box-sizing: border-box;
+  padding: 0 8px 0 0; 
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.intro-middle-box p {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 150%;
+  letter-spacing: 0%;
+
+  margin: 0;
+  padding: 0;
+
+  white-space: normal;        /* 折り返しを有効に */
+  overflow-wrap: break-word;  /* 長い単語でも折り返す */
+  word-break: break-word;     /* 強制改行 */
+  max-width: 100%;            /* 親幅からはみ出さない */
+  box-sizing: border-box;
 }

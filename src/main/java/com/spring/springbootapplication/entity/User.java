@@ -9,6 +9,7 @@ public class User {
     private String email;        // メールアドレス
     private String password;     // パスワード（ハッシュ化推奨）
     private LocalDateTime createdAt;  // 登録日時（DBのtimestamp型に対応）
+    private String profileImageUrl;   // プロフィール画像
 
     // コンストラクタ（引数なし）
     public User() {
@@ -54,5 +55,14 @@ public class User {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    // プロフィール画像のgetter/setter
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }
