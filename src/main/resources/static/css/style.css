@@ -408,3 +408,75 @@ button.button_blue.edit-button:hover {
   margin: 0;         /* pタグの上下余白を削除 */
   line-height: 1.2;  /* 適度な行間 */
 }
+
+/* 学習チャート全体ボックス */
+.learning-chart-box {
+  position: absolute;
+  top: 480px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 960px;
+  height: 331px;
+  box-sizing: border-box;
+}
+
+/* タイトル＋ボタンの親ボックス */
+.learning-chart-inner-box {
+  width: 400px;
+  height: 151px; /* 指定の高さ */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 縦中央揃え */
+  align-items: center;     /* 横中央揃え */
+  gap: 40px;
+  box-sizing: border-box;
+}
+
+/* タイトルボックス */
+.learning-chart-title-box {
+  width: 400px;
+  height: 58px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 16px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  padding-bottom: 4px;
+}
+
+/* タイトルテキスト */
+.learning-chart-title-box p {
+  font-family: Roboto;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  margin: 0;
+  color: #000;
+}
+
+/* 編集ボタン */
+.edit-learning-chart-button {
+  width: 152px;
+  height: 53px;
+  padding: 16px 40px;
+  border-radius: 4px;
+  background-color: #1B5678;
+  color: #fff;
+  border: none;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  cursor: pointer;
+  box-sizing: border-box;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.edit-learning-chart-button:hover {
+  background-color: #144a63;
+}
