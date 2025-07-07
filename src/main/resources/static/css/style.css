@@ -381,3 +381,30 @@ button.button_blue.edit-button:hover {
   max-width: 100%;            /* 親幅からはみ出さない */
   box-sizing: border-box;
 }
+
+/* 画像下の名前 */
+.profile-name-box {
+  position: absolute;
+  top: 370px;
+  left: 86px;
+  width: 194px;
+  height: 57px;
+  box-sizing: border-box;
+  background-color: rgba(100, 100, 100, 0.1);
+  display: flex;
+  align-items: center;       /* 垂直中央揃え */
+  justify-content: center;   /* 横中央揃え */
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  letter-spacing: 0%;
+  text-align: center;
+  color: #000000;
+  padding: 0;
+  margin: 0;
+}
+
+.profile-name-box p {
+  margin: 0;         /* pタグの上下余白を削除 */
+  line-height: 1.2;  /* 適度な行間 */
+}
