@@ -1,5 +1,6 @@
 package com.spring.springbootapplication.controller;
 
+import com.spring.springbootapplication.entity.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +11,7 @@ public class TopController {
 
     @GetMapping("/top")
     public String showTopPage(Model model, HttpSession session) {
+        // ログインしているか確認
         Object loginUser = session.getAttribute("loginUser");
 
         if (loginUser == null) {
@@ -17,9 +19,16 @@ public class TopController {
             return "redirect:/login";
         }
 
-        // ログイン済みなら画面表示
-        model.addAttribute("loginUser", loginUser);
+        // ログイン中ユーザー情報を取り出す
+        User user = (User) loginUser;
+
+        model.addAttribute("loginUser", user);
         model.addAttribute("isLoginPage", false);
+
+        // プロフィール画像URLを渡す
+        String profileImageUrl = user.getProfileImageUrl();
+        model.addAttribute("profileImageUrl", profileImageUrl);
+
         return "top"; // resources/templates/top.html をレンダリング
     }
 }

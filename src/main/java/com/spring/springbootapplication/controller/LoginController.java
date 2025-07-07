@@ -17,6 +17,7 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    // ログイン画面を表示
     @GetMapping("/login")
     public String showLoginForm(Model model) {
         model.addAttribute("loginForm", new LoginForm());
@@ -24,21 +25,25 @@ public class LoginController {
         return "login";
     }
 
+    // ログイン処理
     @PostMapping("/login")
     public String login(
             @ModelAttribute("loginForm") LoginForm loginForm,
             HttpSession session,
             Model model) {
 
-        model.addAttribute("isLoginPage", true); // エラー時の画面制御のため
+        model.addAttribute("isLoginPage", true); // ログインページ用の画面制御
 
+        // メールアドレスでユーザーを検索
         User user = userService.findByEmail(loginForm.getEmail());
 
+        // ユーザーが存在しない、またはパスワード不一致
         if (user == null || !user.getPassword().equals(loginForm.getPassword())) {
             model.addAttribute("errorMessage", "メールアドレス、もしくはパスワードが間違っています");
             return "login";
         }
 
+        // ログイン成功
         session.setAttribute("loginUser", user);
         return "redirect:/top";
     }
