@@ -17,46 +17,34 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    // ===========================
-    // 【開発用】ログイン画面をスキップしてTOPへ
-    // ===========================
+    // ログイン画面を表示
     @GetMapping("/login")
     public String showLoginForm(Model model) {
-        // 無条件リダイレクト
-        return "redirect:/top";
+        model.addAttribute("loginForm", new LoginForm());
+        model.addAttribute("isLoginPage", true);
+        return "login";
     }
 
+    // ログイン処理
     @PostMapping("/login")
     public String login(
             @ModelAttribute("loginForm") LoginForm loginForm,
             HttpSession session,
             Model model) {
 
-        // ===========================
-        // 【開発用】ログインチェックもスキップ
-        // ===========================
-        User dummyUser = new User();
-        dummyUser.setId(1); // Integer
-        dummyUser.setEmail("dummy@example.com");
-        dummyUser.setPassword("dummy");
-        session.setAttribute("loginUser", dummyUser);
-        return "redirect:/top";
+        model.addAttribute("isLoginPage", true); // ログインページ用の画面制御
 
-        /*
-        // ===========================
-        // 【本番用】通常のログイン処理
-        // ===========================
-        model.addAttribute("isLoginPage", true); // エラー時の画面制御のため
-
+        // メールアドレスでユーザーを検索
         User user = userService.findByEmail(loginForm.getEmail());
 
+        // ユーザーが存在しない、またはパスワード不一致
         if (user == null || !user.getPassword().equals(loginForm.getPassword())) {
             model.addAttribute("errorMessage", "メールアドレス、もしくはパスワードが間違っています");
             return "login";
         }
 
+        // ログイン成功
         session.setAttribute("loginUser", user);
         return "redirect:/top";
-        */
     }
 }

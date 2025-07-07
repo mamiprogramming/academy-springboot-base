@@ -11,28 +11,22 @@ public class TopController {
 
     @GetMapping("/top")
     public String showTopPage(Model model, HttpSession session) {
-        // ログインチェックを一時的に無効化
-        /*
+        // ログインしているか確認
         Object loginUser = session.getAttribute("loginUser");
 
         if (loginUser == null) {
             // 未ログインの場合はログイン画面へリダイレクト
             return "redirect:/login";
         }
-        */
 
-        // 仮ユーザーを入れる（必要なら）
-        User dummyUser = new User();
-        dummyUser.setId(1);
-        dummyUser.setEmail("dummy@example.com");
-        dummyUser.setPassword("dummy");
-        session.setAttribute("loginUser", dummyUser);
+        // ログイン中ユーザー情報を取り出す
+        User user = (User) loginUser;
 
-        model.addAttribute("loginUser", dummyUser);
+        model.addAttribute("loginUser", user);
         model.addAttribute("isLoginPage", false);
 
         // プロフィール画像URLを渡す
-        String profileImageUrl = dummyUser.getProfileImageUrl();
+        String profileImageUrl = user.getProfileImageUrl();
         model.addAttribute("profileImageUrl", profileImageUrl);
 
         return "top"; // resources/templates/top.html をレンダリング
