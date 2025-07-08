@@ -22,10 +22,12 @@ public class TopController {
         // ログイン中ユーザー情報を取り出す
         User user = (User) loginUser;
 
+        // ユーザー情報をモデルに渡す
         model.addAttribute("loginUser", user);
+        model.addAttribute("profileName", user.getName()); // ← ここで名前を渡す
         model.addAttribute("isLoginPage", false);
 
-        // プロフィール画像URLを渡す
+        // プロフィール画像URLを渡す（null 可）
         String profileImageUrl = user.getProfileImageUrl();
         model.addAttribute("profileImageUrl", profileImageUrl);
 
