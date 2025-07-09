@@ -35,8 +35,16 @@ public class UserController {
             Model model,
             HttpSession session) {
 
+        model.addAttribute("isLoginPage", false); // ヘッダー用
+
         if (bindingResult.hasErrors()) {
-            model.addAttribute("isLoginPage", false); // ヘッダー用
+            return "register";
+        }
+            
+        // メールアドレスの重複チェック
+        User existingUser = userService.findByEmail(userForm.getEmail());
+        if (existingUser != null) {
+            bindingResult.rejectValue("email", "error.userForm", "このメールアドレスはすでに登録されています");
             return "register";
         }
 

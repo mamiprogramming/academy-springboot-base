@@ -36,7 +36,11 @@
         <div class="form-group-email mb-5">
           <label for="email" class="form-label">メールアドレス</label>
           <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="example@example.com" />
+
           <div th:if="${#fields.hasErrors('email')}" class="text-danger small" th:errors="*{email}"></div>
+
+          <!-- 一意性のエラーメッセージ -->
+          <div th:if="${errorMessage}" class="text-danger small" th:text="${errorMessage}"></div>
         </div>
 
         <!-- パスワード -->

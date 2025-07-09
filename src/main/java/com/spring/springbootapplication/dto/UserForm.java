@@ -13,9 +13,9 @@ public class UserForm {
     @NotBlank(message = "メールアドレスは必ず入力してください")
     @Size(max = 255, message = "メールアドレスは255文字以内で入力してください")
     @Pattern(
-        regexp = "^[\\x00-\\x7F]+$",
-        message = "メールアドレスが正しい形式ではありません"
-    )
+        regexp = "^[^@\\s]+@[^@\\s]+[^@\\s]+$",
+        message = "メールアドレスの形式が正しくありません"
+)
     private String email;
 
     @NotBlank(message = "パスワードは必ず入力してください")

@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 
 @Controller
 public class LoginController {
@@ -17,33 +19,39 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    // ログイン画面を表示
+    // ログイン画面の表示
     @GetMapping("/login")
     public String showLoginForm(Model model) {
         model.addAttribute("loginForm", new LoginForm());
-        model.addAttribute("isLoginPage", true);
+        model.addAttribute("isLoginPage", true); // ヘッダー制御などに使用
         return "login";
     }
 
     // ログイン処理
     @PostMapping("/login")
     public String login(
-            @ModelAttribute("loginForm") LoginForm loginForm,
+            @Valid @ModelAttribute("loginForm") LoginForm loginForm,
+            BindingResult bindingResult,
             HttpSession session,
             Model model) {
 
-        model.addAttribute("isLoginPage", true); // ログインページ用の画面制御
+        model.addAttribute("isLoginPage", true);
 
-        // メールアドレスでユーザーを検索
+        // バリデーションエラーがあればログイン画面に戻す
+        if (bindingResult.hasErrors()) {
+            return "login";
+        }
+
+        // 入力が正常ならユーザー検索
         User user = userService.findByEmail(loginForm.getEmail());
 
         // ユーザーが存在しない、またはパスワード不一致
         if (user == null || !user.getPassword().equals(loginForm.getPassword())) {
-            model.addAttribute("errorMessage", "メールアドレス、もしくはパスワードが間違っています");
+            model.addAttribute("errorMessage", "メールアドレスまたはパスワードが正しくありません");
             return "login";
         }
 
-        // ログイン成功
+        // ログイン成功時：セッションにユーザーを保存
         session.setAttribute("loginUser", user);
         return "redirect:/top";
     }
