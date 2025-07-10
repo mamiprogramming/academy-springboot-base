@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="stylesheet" th:href="@{/css/style.css}" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <footer th:fragment="footer" class="footer-custom">
-    <small th:text="${loginUser != null} ? 'ログイン中: ' + ${loginUser.name} : 'portfolio site'">portfolio site</small>
+    <small th:text="'portfolio site'">portfolio site</small>
   </footer>
 </body>
 </html>
