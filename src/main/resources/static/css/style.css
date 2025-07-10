@@ -65,8 +65,10 @@ main {
 }
 
 .footer-custom small {
+  font-family: 'Roboto', sans-serif;  /* Figma指定のフォントを明示 */
   font-weight: 400;
   font-size: 18px;
+  line-height: 1;           /* line-height: 100% の代替 */
   color: #FFFFFF;
 }
 
