@@ -1,6 +1,7 @@
 /* ========== 全体のHTMLとbody設定 ========== */
 html, body {
   height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
   display: flex;
@@ -22,7 +23,6 @@ html, body {
   justify-content: space-between;
   padding: 0 40px;
   width: 100%;
-  max-width: 1440px;
   box-sizing: border-box;
   overflow-x: hidden; /* はみ出さない */
 }
@@ -48,6 +48,7 @@ main {
 .container {
   width: 100%;
   max-width: 480px;
+  margin: 0 auto; /* 中央寄せされていないように見える対策 */
   box-sizing: border-box;
 }
 
@@ -61,10 +62,8 @@ main {
   align-items: center;
   padding: 0 40px;
   width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
   box-sizing: border-box;
-  flex-shrink: 0; /* 高さが縮まらないように */
+  flex-shrink: 0;/* 高さが縮まらないように */
 }
 
 .footer-custom small {
@@ -181,13 +180,6 @@ main {
   justify-content: center;
   padding: 0;
   transition: none;
-}
-
-.login-button:hover {
-  background: #FFFFFF;
-  color: #000000BF;
-  cursor: default;
-  pointer-events: none;
 }
 
 /* ========== エラーメッセージ ========== */
