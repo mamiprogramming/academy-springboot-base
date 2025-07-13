@@ -183,13 +183,6 @@ main {
   transition: none;
 }
 
-.login-button:hover {
-  background: #FFFFFF;
-  color: #000000BF;
-  cursor: default;
-  pointer-events: none;
-}
-
 /* ========== エラーメッセージ ========== */
 .error-message {
   color: red;
