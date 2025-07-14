@@ -17,53 +17,55 @@
 
 <body>
 
-  <!-- ヘッダー読み込み -->
-  <header th:replace="~{common/header :: header}"></header>
+  <div class="wrapper">
+    <!-- ヘッダー読み込み -->
+    <header th:replace="~{common/header :: header}"></header>
 
-  <div class="profile-section">
-    <div class="profile-content">
-      <div class="profile-intro">
-        <div class="profile-image-wrapper">
-          <th:block th:if="${profileImageUrl != null}">
-            <img th:src="@{${profileImageUrl}}" alt="プロフィール画像"/>
-          </th:block>
-          <th:block th:if="${profileImageUrl == null}">
-            <div class="profile-image-placeholder"></div>
-          </th:block>
-        </div>
+    <main class="profile-section">
+      <div class="profile-content">
+        <div class="profile-intro">
+          <div class="profile-image-wrapper">
+            <th:block th:if="${profileImageUrl != null}">
+              <img th:src="@{${profileImageUrl}}" alt="プロフィール画像"/>
+            </th:block>
+            <th:block th:if="${profileImageUrl == null}">
+              <div class="profile-image-placeholder"></div>
+            </th:block>
+          </div>
 
-        <!-- 名前ボックス -->
-        <div class="profile-name-box">
-          <p th:text="${profileName}">名前</p>
-        </div>
+          <!-- 名前ボックス -->
+          <div class="profile-name-box">
+            <p th:text="${profileName}">名前</p>
+          </div>
 
-        <div class="profile-right-box">
-            <div class="intro-box">自己紹介</div>
-            <div class="intro-middle-box">
-              <p>自分の自己紹介文章が入ります。自分の自己紹介文章が入ります。自分の自己紹介文章が入ります。自分の自己紹介文章が入ります。自分の自己紹介文章が入ります。</p>
-            </div>
-            <button class="button_blue edit-button" onclick="location.href='/profile/edit'">
-              自己紹介を編集する
-            </button>
-        </div>
+          <div class="profile-right-box">
+              <div class="intro-box">自己紹介</div>
+              <div class="intro-middle-box">
+                <p>自分の自己紹介文章が入ります。自分の自己紹介文章が入ります。自分の自己紹介文章が入ります。自分の自己紹介文章が入ります。自分の自己紹介文章が入ります。</p>
+              </div>
+              <button class="button_blue edit-button" onclick="location.href='/profile/edit'">
+                自己紹介を編集する
+              </button>
+          </div>
 
-        <!-- 学習チャートボックス -->
-        <div class="learning-chart-box">
-            <div class="learning-chart-inner-box">
-                <div class="learning-chart-title-box">
-                  <p>学習チャート</p>
-                </div>
-                <button class="button_blue edit-learning-chart-button" onclick="location.href='/skill/edit'">
-                  編集する
-                </button>
-            </div>
+          <!-- 学習チャートボックス -->
+          <div class="learning-chart-box">
+              <div class="learning-chart-inner-box">
+                  <div class="learning-chart-title-box">
+                    <p>学習チャート</p>
+                  </div>
+                  <button class="button_blue edit-learning-chart-button" onclick="location.href='/skill/edit'">
+                    編集する
+                  </button>
+              </div>
           </div>
         </div>
-    </div>
-  </div>
+      </div>
+    </main>
 
-  <!-- フッター読み込み -->
-  <footer th:replace="common/footer :: footer"></footer>
+    <!-- フッター読み込み -->
+    <footer class="footer-custom" th:replace="common/footer :: footer"></footer>
+  </div>
 
 </body>
 
