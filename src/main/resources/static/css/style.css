@@ -1,17 +1,11 @@
 /* ========== 全体のHTMLとbody設定 ========== */
 html, body {
-  height: 100%;
-  width: 100%;
+  height: 100%; /* 画面高さを100%に */
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  min-width: 320px;
   font-family: 'Roboto', sans-serif;
-  background-color: #fff;
-
-  /* 全体の横スクロールは無しにしておく（必要なら追加可能） */
-  overflow-x: hidden;
 }
 
 /* ========== ヘッダー ========== */
@@ -22,7 +16,7 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 0 40px;
-  width: 100%;
+  width: 100vw;
   box-sizing: border-box;
   overflow-x: hidden; /* はみ出さない */
 }
@@ -35,14 +29,22 @@ html, body {
   text-decoration: none;
 }
 
+header {
+  height: 120px;
+  background-color: #1B5678;
+}
+
 /* ========== メインコンテンツ ========== */
 main {
   flex: 1;
-  display: flex;
-  justify-content: center;
   padding: 40px 20px;
   box-sizing: border-box;
-  overflow-x: hidden; /* メインもはみ出し防止 */
+}
+
+.wrapper {
+  flex: 1;           /* ヘッダーとフッターを除いた部分が伸びる */
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
@@ -61,7 +63,7 @@ main {
   justify-content: center;
   align-items: center;
   padding: 0 40px;
-  width: 100%;
+  width: 100vw;
   box-sizing: border-box;
   flex-shrink: 0;/* 高さが縮まらないように */
 }
@@ -72,6 +74,16 @@ main {
   font-size: 18px;
   line-height: 1;           /* line-height: 100% の代替 */
   color: #FFFFFF;
+}
+
+footer {
+  height: 40px;
+  background-color: #1B5678;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
 }
 
 /* ========== タイトル ========== */
@@ -204,14 +216,14 @@ main {
 .profile-section {
   width: 100%;
   max-width: 1440px;
-  height: 742px;
+  min-height: 1531px;
   margin: 0 auto;
   padding-top: 80px;
   padding-bottom: 80px;
   box-sizing: border-box;
   position: relative;
 
-  overflow-x: auto; /* 横スクロール許可 */
+  overflow-x: visible; 
   -webkit-overflow-scrolling: touch;
 }
 
