@@ -1,17 +1,16 @@
 /* ========== 全体のHTMLとbody設定 ========== */
 html, body {
   height: 100%;
-  width: 100%;
+  width: 100vw;
   margin: 0;
   padding: 0;
+  overflow-x: auto;
   display: flex;
   flex-direction: column;
   min-width: 320px;
   font-family: 'Roboto', sans-serif;
-  background-color: #fff;
-
-  /* 全体の横スクロールは無しにしておく（必要なら追加可能） */
-  overflow-x: hidden;
+  background-color: #FFFFFF;
+  scrollbar-gutter: stable; /* スクロールバーの場所確保 */
 }
 
 /* ========== ヘッダー ========== */
@@ -22,7 +21,7 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 0 40px;
-  width: 100%;
+  width: 100vw;
   box-sizing: border-box;
   overflow-x: hidden; /* はみ出さない */
 }
@@ -38,11 +37,9 @@ html, body {
 /* ========== メインコンテンツ ========== */
 main {
   flex: 1;
-  display: flex;
-  justify-content: center;
   padding: 40px 20px;
   box-sizing: border-box;
-  overflow-x: hidden; /* メインもはみ出し防止 */
+  overflow-x: hidden;
 }
 
 .container {
@@ -61,7 +58,7 @@ main {
   justify-content: center;
   align-items: center;
   padding: 0 40px;
-  width: 100%;
+  width: 100vw;
   box-sizing: border-box;
   flex-shrink: 0;/* 高さが縮まらないように */
 }
@@ -211,7 +208,7 @@ main {
   box-sizing: border-box;
   position: relative;
 
-  overflow-x: auto; /* 横スクロール許可 */
+  overflow-x: visible; 
   -webkit-overflow-scrolling: touch;
 }
 
