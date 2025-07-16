@@ -2,6 +2,8 @@ package com.spring.springbootapplication.service;
 
 import com.spring.springbootapplication.entity.User;
 import com.spring.springbootapplication.dao.UserMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +22,21 @@ public class UserService {
         userMapper.insertUser(user);
     }
 
-    // ★ 追加：メールアドレスで検索
+    // メールアドレスで検索
     public User findByEmail(String email) {
         return userMapper.findByEmail(email);
+    }
+
+    // ログイン中のユーザーを取得
+    public User getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        return userMapper.findByEmail(email);
+    }
+
+    // 自己紹介・画像の更新
+    @Transactional
+    public void updateProfile(User user) {
+        userMapper.updateUserProfile(user);
     }
 }
