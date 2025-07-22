@@ -634,7 +634,7 @@ button.submit-button {
   text-align: center;
   box-sizing: border-box;
   transition: background-color 0.3s ease;
-  margin-top: 7px; /* ←ここだけ変更（他の margin は削除） */
+  margin-top: 36px; /* ←ここだけ変更（他の margin は削除） */
 }
 
 button.submit-button:hover {
@@ -660,7 +660,7 @@ button.submit-button:hover {
 }
 
 .avatar-wrapper {
-  margin-top: 46px; /* 調整 */
+  margin-top: 100px; /* 調整 */
 }
 
 /* ファイル選択ボタン */
