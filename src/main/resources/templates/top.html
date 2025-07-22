@@ -25,10 +25,10 @@
       <div class="profile-content">
         <div class="profile-intro">
           <div class="profile-image-wrapper">
-            <th:block th:if="${profileImageUrl != null}">
-              <img th:src="@{${profileImageUrl}}" alt="プロフィール画像"/>
+            <th:block th:if="${image != null}">
+              <img th:src="@{${image}}" alt="プロフィール画像"/>
             </th:block>
-            <th:block th:if="${profileImageUrl == null}">
+            <th:block th:if="${image == null}">
               <div class="profile-image-placeholder"></div>
             </th:block>
           </div>
