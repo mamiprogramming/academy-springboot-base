@@ -511,3 +511,180 @@ button.button_blue.edit-button:hover {
 .edit-learning-chart-button:hover {
   background-color: #144a63;
 }
+
+
+/* ========== 自己紹介編集ページ ========== */
+
+/* タイトル部分：自己紹介を編集する */
+.edit-title {
+  width: 324px;
+  height: 48px;
+  margin: 48px auto 48px auto;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 1.33;
+  letter-spacing: 0;
+  text-align: center;
+  background: transparent;
+  padding: 0;
+}
+
+/* 自己紹介文・アバター画像・ボタンのボックス */
+.form-container {
+  margin-top: 80px;
+  max-width: 980px;
+  width: 100%;
+  height: 342px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 16px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  box-sizing: border-box;
+}
+
+/* 中間ボックス */
+.form-inner-box {
+  width: 480px;
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  justify-content: space-between;
+}
+
+/* ラベル共通 */
+.form-label,
+.form-description {
+  width: 100%;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+
+/* 自己紹介文のラベル */
+.form-label {
+  width: 258px;
+  height: 20px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  vertical-align: middle;
+  opacity: 1;
+  transform: rotate(0deg);
+  text-align: left;
+  margin-bottom: 0;
+}
+
+/* 50文字以上、200文字以下で入力してくださいの文字 */
+.text-muted {
+  white-space: nowrap;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: normal;
+  letter-spacing: 0.4px;
+  vertical-align: middle;
+  opacity: 1;
+  text-align: left;
+  width: 258px;
+  margin-top: 0 !important;
+}
+
+/* 自己紹介文入力部分 */
+textarea.form-control {
+  width: 480px;
+  height: 95px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 19px;
+  letter-spacing: 0.15px;
+  vertical-align: middle;
+  opacity: 1;
+  resize: vertical;
+}
+
+/* ボタン */
+button.submit-button {
+  align-self: center;
+  width: 322px;
+  height: 53px;
+  opacity: 1;
+  border-radius: 4px;
+  padding: 16px 80px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0;
+  color: #FFFFFF;
+  background-color: #1B5678;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease;
+  margin-top: 7px; /* ←ここだけ変更（他の margin は削除） */
+}
+
+button.submit-button:hover {
+  background-color: #144a63;
+}
+
+/* アバター画像＋ボタン全体をまとめたボックス */
+.avatar-box {
+  display: flex;
+  flex-direction: column;  /* 縦並びに変更 */
+  align-items: flex-start; /* 左揃えに */
+  gap: 0;                /* ラベルとボタンの間隔 */
+  width: 480px;
+  margin: 24px auto 0 auto; /* 上だけ少し余白を開けて左右中央 */
+  /* heightは必要なら調整してください */
+}
+
+/* アバター画像のラベル */
+.avatar-box .form-label {
+  margin-bottom: 0;        /* ラベルの下の余白なし */
+  font-weight: 500;
+  line-height: 1.2; /* 文字の高さを少し詰める */
+}
+
+.avatar-wrapper {
+  margin-top: 46px; /* 調整 */
+}
+
+/* ファイル選択ボタン */
+.custom-file-btn {
+  width: 202px;
+  height: 32px;
+  border-radius: 4px;
+  padding: 8px 24px;
+  background-color: rgba(0, 0, 0, 0.1); /* 黒10%透過 */
+  color: rgba(0, 0, 0, 0.75);           /* 黒75%透過 */
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: 0;
+  border: none;
+  cursor: pointer;
+  margin-top: -8px;           /* ボタンの上の余白はなし */
+}
+
+/* ファイル名表示用 
+.file-name-text {
+  margin-left: 12px;
+  font-size: 14px;
+  color: #666;
+}*/
