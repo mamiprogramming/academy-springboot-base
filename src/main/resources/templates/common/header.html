@@ -1,18 +1,18 @@
 <!-- templates/common/header.html -->
 <header th:fragment="header">
   <nav class="navbar-custom"
-       th:classappend="${isLoginPage} ? ' justify-content-center' : ' justify-content-between'">
+       th:classappend="${isLoginPage != null and isLoginPage} ? ' justify-content-center' : ' justify-content-between'">
     <div class="navbar-brand-custom">My Portfolio</div>
 
     <!-- ログインページではログイン・ログアウトボタン非表示 -->
-    <th:block th:if="${!isLoginPage}">
+    <th:block th:if="${isLoginPage != null and !isLoginPage}">
       <!-- 未ログインの場合ログインボタン -->
-      <th:block th:if="${session.loginUser == null}">
+      <th:block th:if="${session != null and session.loginUser == null}">
         <button onclick="location.href='/login'" class="login-button">ログイン</button>
       </th:block>
 
       <!-- ログイン済みの場合ログアウトボタン -->
-      <th:block th:if="${session.loginUser != null}">
+      <th:block th:if="${session != null and session.loginUser != null}">
         <form th:action="@{/logout}" method="post" style="display:inline;">
           <button type="submit" class="login-button">ログアウト</button>
         </form>
