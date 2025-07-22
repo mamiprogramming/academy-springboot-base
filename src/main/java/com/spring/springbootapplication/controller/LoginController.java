@@ -53,6 +53,7 @@ public class LoginController {
 
         // ログイン成功時：セッションにユーザーを保存
         session.setAttribute("loginUser", user);
+        System.out.println("ログイン成功: " + user.getEmail());// ログイン成功時：セッションにユーザーを保存
         return "redirect:/top";
     }
 }
