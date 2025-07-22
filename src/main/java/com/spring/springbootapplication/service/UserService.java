@@ -2,10 +2,10 @@ package com.spring.springbootapplication.service;
 
 import com.spring.springbootapplication.entity.User;
 import com.spring.springbootapplication.dao.UserMapper;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class UserService {
@@ -27,11 +27,9 @@ public class UserService {
         return userMapper.findByEmail(email);
     }
 
-    // ログイン中のユーザーを取得
-    public User getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName();
-        return userMapper.findByEmail(email);
+    // ログイン中のユーザーをHttpSessionから取得
+    public User getCurrentUser(HttpSession session) {
+        return (User) session.getAttribute("loginUser");
     }
 
     // 自己紹介・画像の更新
