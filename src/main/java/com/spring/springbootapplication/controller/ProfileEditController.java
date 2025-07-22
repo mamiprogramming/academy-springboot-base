@@ -1,12 +1,17 @@
 package com.spring.springbootapplication.controller;
 
+import com.spring.springbootapplication.dto.ProfileEditForm;
+import com.spring.springbootapplication.entity.User;
+import com.spring.springbootapplication.service.UserService;
+
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -17,26 +22,26 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.nio.file.Files;
 
 @Controller
 @RequestMapping("/profile")
 public class ProfileEditController {
 
     @Autowired
-    private UserService userService;  // ユーザーデータ操作サービス（例）
+    private UserService userService;
 
-    // 画像保存先ディレクトリ（環境に応じて変更）
-    private static final String UPLOAD_DIR = "upload/";
+    // アップロードフォルダ（プロジェクト内の static/upload/）
+    private static final String UPLOAD_DIR = "src/main/resources/static/upload/";
 
-    // GET：編集画面表示
+    // GET：自己紹介編集ページの表示
     @GetMapping("/edit")
-    public String showEditForm(Model model) {
-        // ログインユーザーの情報取得例
-        User currentUser = userService.getCurrentUser();
+    public String showEditForm(Model model, HttpSession session) {
+        User currentUser = userService.getCurrentUser(session);
+        if (currentUser == null) {
+            // ログインしていない場合の処理（ログインページにリダイレクトなど）
+            return "redirect:/login";
+        }
 
-        // フォームDTOにセット
         ProfileEditForm form = new ProfileEditForm();
         form.setBio(currentUser.getBio());
         form.setImageFilename(currentUser.getImage());
@@ -45,46 +50,49 @@ public class ProfileEditController {
         return "profile_edit";
     }
 
-    // POST：編集内容送信処理
+    // POST：自己紹介と画像の保存処理
     @PostMapping("/edit")
     public String submitEdit(
             @Valid @ModelAttribute("profileEditForm") ProfileEditForm form,
             BindingResult bindingResult,
-            Model model) throws IOException {
+            Model model,
+            HttpSession session) throws IOException {
 
-        // バリデーションエラー時は再表示
         if (bindingResult.hasErrors()) {
             return "profile_edit";
         }
 
-        User currentUser = userService.getCurrentUser();
-
-        // 画像ファイルがアップロードされた場合の処理
-        MultipartFile imageFile = form.getImage();
-        if (imageFile != null && !imageFile.isEmpty()) {
-            // ファイル名を安全に取得（実際はUUID等でユニーク化推奨）
-            String filename = imageFile.getOriginalFilename();
-
-            // 保存先のパスを作成（uploadフォルダはあらかじめ作成しておく）
-            File uploadDir = new File(UPLOAD_DIR);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
-            }
-
-            File dest = new File(uploadDir, filename);
-            imageFile.transferTo(dest);  // ファイル保存
-
-            // DBにファイル名をセット
-            currentUser.setImage(filename);
+        User currentUser = userService.getCurrentUser(session);
+        if (currentUser == null) {
+            return "redirect:/login";
         }
 
         // 自己紹介をセット
         currentUser.setBio(form.getBio());
 
-        // DB更新（サービス経由で）
-        userService.updateUser(currentUser);
+        // 画像ファイル処理
+        MultipartFile imageFile = form.getImage();
+        if (imageFile != null && !imageFile.isEmpty()) {
+            // ファイル名を取得（ユニーク化推奨。ここでは元の名前＋時間で簡易対応）
+            String filename = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
 
-        // TOPページへリダイレクト
-        return "redirect:/";
+            // フォルダがなければ作成
+            File uploadDir = new File(UPLOAD_DIR);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+
+            // 保存
+            File dest = new File(uploadDir, filename);
+            imageFile.transferTo(dest);
+
+            // DBにファイル名を保存
+            currentUser.setImage(filename);
+        }
+
+        // DB更新処理
+        userService.updateProfile(currentUser);
+
+        return "redirect:/"; // TOPへ
     }
 }
