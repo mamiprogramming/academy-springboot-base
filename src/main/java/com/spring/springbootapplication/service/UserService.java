@@ -5,6 +5,8 @@ import com.spring.springbootapplication.dao.UserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.servlet.http.HttpSession;
+
 @Service
 public class UserService {
 
@@ -20,8 +22,19 @@ public class UserService {
         userMapper.insertUser(user);
     }
 
-    // ★ 追加：メールアドレスで検索
+    // メールアドレスで検索
     public User findByEmail(String email) {
         return userMapper.findByEmail(email);
+    }
+
+    // ログイン中のユーザーをHttpSessionから取得
+    public User getCurrentUser(HttpSession session) {
+        return (User) session.getAttribute("loginUser");
+    }
+
+    // 自己紹介・画像の更新
+    @Transactional
+    public void updateProfile(User user) {
+        userMapper.updateUserProfile(user);
     }
 }

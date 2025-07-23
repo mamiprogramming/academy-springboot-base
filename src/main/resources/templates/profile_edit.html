@@ -2,9 +2,70 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
-  <title>自己紹介編集（簡易）</title>
+  <title>自己紹介を編集する</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
-<body>
-  <h1>自己紹介を編集する（簡易）</h1>
+
+<body class="d-flex flex-column min-vh-100">
+
+  <!-- ヘッダー -->
+  <header th:replace="common/header :: header(isLoginPage=false)"></header>
+
+  <main class="flex-grow-1">
+    <h2 class="title-center edit-title">自己紹介を編集する</h2>
+
+    <div class="form-container">
+      <form th:action="@{/profile/edit}" th:object="${profileEditForm}" method="post" enctype="multipart/form-data" novalidate>
+        <div class="form-inner-box d-flex flex-column">
+
+          <!-- 自己紹介 -->
+          <label for="bio" class="form-label">自己紹介文</label>
+          <textarea id="bio" th:field="*{bio}" class="form-control" rows="5"></textarea>
+          <div class="form-text text-muted" style="white-space: nowrap;">
+            50文字以上、200文字以下で入力してください
+          </div>
+          <div th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}" class="text-danger mt-1"></div>
+
+          <!-- アバター画像 -->
+          <label for="image" class="form-label mt-4 mb-1">アバター画像</label>
+
+          <!-- ファイル選択ボタンとファイル名 -->
+          <div class="file-upload-area d-flex align-items-center gap-3">
+            <input type="file" id="image" name="image" class="visually-hidden" onchange="updateFileName(this)">
+            <button type="button" class="custom-file-btn" onclick="document.getElementById('image').click();">
+              画像ファイルを添付する
+            </button>
+            <span id="file-name" class="file-name-text"
+                  th:attr="data-original-filename=${profileEditForm.imageFilename}"
+                  th:text="${profileEditForm.imageFilename} ?: ''">
+            </span>
+          </div>
+
+          <!-- 送信ボタン -->
+          <div class="text-center pt-3">
+            <button type="submit" class="submit-button">自己紹介を確定する</button>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- フッター -->
+  <footer th:replace="common/footer :: footer"></footer>
+
+  <!-- ファイル名更新スクリプト -->
+  <script>
+    function updateFileName(input) {
+      const fileNameSpan = document.getElementById('file-name');
+      const file = input.files[0];
+      fileNameSpan.textContent = file ? file.name : '';
+    }
+  </script>
 </body>
 </html>
