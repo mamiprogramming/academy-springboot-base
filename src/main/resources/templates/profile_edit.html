@@ -14,7 +14,7 @@
 <body class="d-flex flex-column min-vh-100">
 
   <!-- ヘッダー -->
-  <header th:replace="common/header :: header"></header>
+  <header th:replace="common/header :: header(isLoginPage=false)"></header>
 
   <main class="flex-grow-1">
     <h2 class="title-center edit-title">自己紹介を編集する</h2>
