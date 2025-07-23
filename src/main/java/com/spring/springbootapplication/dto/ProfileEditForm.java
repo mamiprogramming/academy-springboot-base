@@ -7,7 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class ProfileEditForm {
 
-    @NotBlank(message = "自己紹介は50文字以上200文字以下で入力してください")
     @Size(min = 50, max = 200, message = "自己紹介は50文字以上200文字以下で入力してください")
     private String bio;
 
