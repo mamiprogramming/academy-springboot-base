@@ -539,9 +539,9 @@ button.button_blue.edit-button:hover {
   margin-left: auto;
   margin-right: auto;
   padding: 0 16px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: transparent; /* ← 背景を透明に */
+  border-radius: 0;              /* ← 角を丸くしない */
+  box-shadow: none;              /* ← 影を消す */
   display: flex;
   flex-direction: column;
   gap: 48px;
@@ -597,6 +597,7 @@ button.button_blue.edit-button:hover {
   text-align: left;
   width: 258px;
   margin-top: 0 !important;
+  margin-bottom: 18px;
 }
 
 /* 自己紹介文入力部分 */
@@ -634,7 +635,7 @@ button.submit-button {
   text-align: center;
   box-sizing: border-box;
   transition: background-color 0.3s ease;
-  margin-top: 36px; /* ←ここだけ変更（他の margin は削除） */
+  margin-top: 34px; /* ←ここだけ変更（他の margin は削除） */
 }
 
 button.submit-button:hover {
@@ -648,7 +649,7 @@ button.submit-button:hover {
   align-items: flex-start; /* 左揃えに */
   gap: 0;                /* ラベルとボタンの間隔 */
   width: 480px;
-  margin: 24px auto 0 auto; /* 上だけ少し余白を開けて左右中央 */
+  margin: 36px auto 0 auto; /* 上だけ少し余白を開けて左右中央 */
   /* heightは必要なら調整してください */
 }
 
@@ -682,9 +683,8 @@ button.submit-button:hover {
   margin-top: -8px;           /* ボタンの上の余白はなし */
 }
 
-/* ファイル名表示用 
+/* ファイル名表示用 */
 .file-name-text {
-  margin-left: 12px;
-  font-size: 14px;
-  color: #666;
-}*/
+  overflow: hidden; /* はみ出た部分は隠す */
+  text-overflow: ellipsis; /* はみ出たテキストは「…」で表示 */
+}
