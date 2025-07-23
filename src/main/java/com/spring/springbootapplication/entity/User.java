@@ -11,6 +11,7 @@ public class User {
     private LocalDateTime createdAt;  // 登録日時（DBのtimestamp型に対応）
     private String bio;    // 自己紹介
     private String image;  // 画像ファイル名
+    private String imageFilename;
 
     // コンストラクタ（引数なし）
     public User() {
@@ -72,5 +73,13 @@ public class User {
     }
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getImageFilename() {
+        return imageFilename;
+    }
+    
+    public void setImageFilename(String imageFilename) {
+        this.imageFilename = imageFilename;
     }
 }

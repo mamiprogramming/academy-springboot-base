@@ -8,20 +8,26 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 @Controller
 @RequestMapping("/profile")
@@ -30,15 +36,13 @@ public class ProfileEditController {
     @Autowired
     private UserService userService;
 
-    // アップロードフォルダ（プロジェクト内の static/upload/）
-    private static final String UPLOAD_DIR = "src/main/resources/static/upload/";
+    @Value("${upload.path}")
+    private String uploadPath;
 
-    // GET：自己紹介編集ページの表示
     @GetMapping("/edit")
     public String showEditForm(Model model, HttpSession session) {
         User currentUser = userService.getCurrentUser(session);
         if (currentUser == null) {
-            // ログインしていない場合の処理（ログインページにリダイレクトなど）
             return "redirect:/login";
         }
 
@@ -50,7 +54,6 @@ public class ProfileEditController {
         return "profile_edit";
     }
 
-    // POST：自己紹介と画像の保存処理
     @PostMapping("/edit")
     public String submitEdit(
             @Valid @ModelAttribute("profileEditForm") ProfileEditForm form,
@@ -67,32 +70,70 @@ public class ProfileEditController {
             return "redirect:/login";
         }
 
-        // 自己紹介をセット
+        // 自己紹介更新
         currentUser.setBio(form.getBio());
 
-        // 画像ファイル処理
         MultipartFile imageFile = form.getImage();
         if (imageFile != null && !imageFile.isEmpty()) {
-            // ファイル名を取得（ユニーク化推奨。ここでは元の名前＋時間で簡易対応）
-            String filename = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
-
-            // フォルダがなければ作成
-            File uploadDir = new File(UPLOAD_DIR);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
+            File dir = new File(uploadPath);
+            if (!dir.exists()) {
+                dir.mkdirs();
             }
 
-            // 保存
-            File dest = new File(uploadDir, filename);
-            imageFile.transferTo(dest);
+            String originalFilename = imageFile.getOriginalFilename();
+            String safeFilename = originalFilename.replaceAll("[^a-zA-Z0-9\\.\\-_]", "_");
+            String filename = System.currentTimeMillis() + "_" + safeFilename;
 
-            // DBにファイル名を保存
+            // 画像読み込み
+            BufferedImage originalImage = ImageIO.read(imageFile.getInputStream());
+
+            // ターゲットサイズ（正方形360x360）
+            int targetSize = 360;
+
+            // 元画像の縦横比を計算
+            int originalWidth = originalImage.getWidth();
+            int originalHeight = originalImage.getHeight();
+
+            // トリミングする領域のサイズと開始位置（中心から正方形で切り抜く）
+            int cropSize;
+            int cropStartX;
+            int cropStartY;
+
+            if (originalWidth > originalHeight) {
+                cropSize = originalHeight;
+                cropStartX = (originalWidth - cropSize) / 2;
+                cropStartY = 0;
+            } else {
+                cropSize = originalWidth;
+                cropStartX = 0;
+                cropStartY = (originalHeight - cropSize) / 2;
+            }
+
+            // 中心の正方形を切り抜く
+            BufferedImage croppedImage = originalImage.getSubimage(cropStartX, cropStartY, cropSize, cropSize);
+
+            // リサイズ画像作成
+            BufferedImage resizedImage = new BufferedImage(targetSize, targetSize, BufferedImage.TYPE_INT_RGB);
+
+            Graphics2D g = resizedImage.createGraphics();
+            g.setComposite(AlphaComposite.Src);
+            g.setColor(Color.WHITE);  // 背景白で塗りつぶし（透過を白に変換）
+            g.fillRect(0, 0, targetSize, targetSize);
+            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g.drawImage(croppedImage, 0, 0, targetSize, targetSize, null);
+            g.dispose();
+
+            File dest = new File(dir, filename);
+
+            // JPEGで保存
+            ImageIO.write(resizedImage, "jpg", dest);
+
+            // Userエンティティにセット
             currentUser.setImage(filename);
         }
 
-        // DB更新処理
         userService.updateProfile(currentUser);
 
-        return "redirect:/"; // TOPへ
+        return "redirect:/";
     }
 }

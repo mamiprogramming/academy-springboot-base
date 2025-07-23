@@ -25,6 +25,7 @@ public class TopController {
         // ユーザー情報をモデルに渡す
         model.addAttribute("loginUser", user);
         model.addAttribute("profileName", user.getName()); // ← ここで名前を渡す
+        model.addAttribute("bio", user.getBio());
         model.addAttribute("isLoginPage", false);
 
         // プロフィール画像URLを渡す（null 可）

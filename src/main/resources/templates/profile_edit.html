@@ -32,14 +32,16 @@
           </div>
           <div th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}" class="text-danger mt-1"></div>
 
-          <!-- アバター画像とファイル添付ボタン -->
-          <div class="avatar-wrapper mb-3 d-flex flex-column gap-2" style="width: 480px;">
-            <label for="image" class="form-label mb-0">アバター画像</label>
+          <!-- アバター画像ラベル -->
+          <label for="image" class="form-label mt-4 mb-1">アバター画像</label>
+
+          <!-- ファイル選択ボタンとファイル名表示を横並びに -->
+          <div class="file-upload-area d-flex align-items-center gap-3" style="width: 480px;">
             <input type="file" id="image" name="image" class="visually-hidden" onchange="updateFileName(this)">
             <button type="button" class="custom-file-btn" onclick="document.getElementById('image').click();">
               画像ファイルを添付する
             </button>
-            <span id="file-name" class="file-name-text"></span>
+            <span id="file-name" class="file-name-text">ファイルが選択されていません</span>
           </div>
 
           <div th:if="${profileEditForm.imageFilename != null and profileEditForm.imageFilename != ''}" class="mb-4">
@@ -50,6 +52,7 @@
           <div class="text-center pt-3">
             <button type="submit" class="submit-button">自己紹介を確定する</button>
           </div>
+
         </div>
 
       </form>

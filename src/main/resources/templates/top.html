@@ -26,7 +26,7 @@
         <div class="profile-intro">
           <div class="profile-image-wrapper">
             <th:block th:if="${image != null}">
-              <img th:src="@{${image}}" alt="プロフィール画像"/>
+              <img th:src="@{/uploads/{filename}(filename=${image})}" alt="プロフィール画像" />
             </th:block>
             <th:block th:if="${image == null}">
               <div class="profile-image-placeholder"></div>
@@ -41,7 +41,7 @@
           <div class="profile-right-box">
               <div class="intro-box">自己紹介</div>
               <div class="intro-middle-box">
-                <p>自分の自己紹介文章が入ります。自分の自己紹介文章が入ります。自分の自己紹介文章が入ります。自分の自己紹介文章が入ります。自分の自己紹介文章が入ります。</p>
+                <p th:text="${bio}">自己紹介がここに表示されます</p>
               </div>
               <button class="button_blue edit-button" onclick="location.href='/profile/edit'">
                 自己紹介を編集する
