@@ -381,7 +381,7 @@ button.button_blue.edit-button:hover {
 
 /* 自己紹介テキストボックス */
 .intro-middle-box {
-  margin-top:90px; /* 58px（intro-box高さ） + 32px（余白） */
+  margin-top: 74px; /* 58px（intro-box高さ） + 16px（余白） */
   min-height: 145px; /* 初期の高さを固定 */
   width: 100%;
   padding-left: 0; /* 余計な内側余白はなし */
