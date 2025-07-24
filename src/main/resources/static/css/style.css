@@ -666,6 +666,7 @@ button.submit-button:hover {
 
 /* ファイル選択ボタン */
 .custom-file-btn {
+  white-space: nowrap;       /* ボタン内テキストは折り返さない */
   width: 202px;
   height: 32px;
   border-radius: 4px;
@@ -685,6 +686,10 @@ button.submit-button:hover {
 
 /* ファイル名表示用 */
 .file-name-text {
-  overflow: hidden; /* はみ出た部分は隠す */
-  text-overflow: ellipsis; /* はみ出たテキストは「…」で表示 */
+  max-width: 100%;         /* 親要素の幅までに制限 */
+  white-space: nowrap;     /* 横スクロールさせたい場合 */
+  overflow: hidden;        /* はみ出し部分を隠す */
+  text-overflow: ellipsis; /* はみ出たら「…」で表示 */
+  display: inline-block;   /* 幅を制御できるように */
+  vertical-align: middle;  /* 行内中央揃え */
 }
