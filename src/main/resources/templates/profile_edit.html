@@ -41,10 +41,11 @@
               画像ファイルを添付する
             </button>
             <span id="file-name" class="file-name-text"
-                  th:attr="data-original-filename=${profileEditForm.imageFilename}"
-                  th:text="${profileEditForm.imageFilename} ?: ''">
-            </span>
+                  th:text="${profileEditForm.imageFilename} ?: ''"></span>
           </div>
+
+          <!-- hiddenで現在の画像ファイル名を送信 -->
+          <input type="hidden" name="imageFilename" th:value="${profileEditForm.imageFilename}" />
 
           <!-- 送信ボタン -->
           <div class="text-center pt-3">
