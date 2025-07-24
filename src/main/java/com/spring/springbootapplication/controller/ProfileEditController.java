@@ -56,84 +56,89 @@ public class ProfileEditController {
 
     @PostMapping("/edit")
     public String submitEdit(
-            @Valid @ModelAttribute("profileEditForm") ProfileEditForm form,
-            BindingResult bindingResult,
-            Model model,
-            HttpSession session) throws IOException {
+        @Valid @ModelAttribute("profileEditForm") ProfileEditForm form,
+        BindingResult bindingResult,
+        Model model,
+        HttpSession session) throws IOException {
 
-        if (bindingResult.hasErrors()) {
-            return "profile_edit";
-        }
-
-        User currentUser = userService.getCurrentUser(session);
-        if (currentUser == null) {
-            return "redirect:/login";
-        }
-
-        // 自己紹介更新
-        currentUser.setBio(form.getBio());
-
-        MultipartFile imageFile = form.getImage();
-        if (imageFile != null && !imageFile.isEmpty()) {
-            File dir = new File(uploadPath);
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-
-            String originalFilename = imageFile.getOriginalFilename();
-            String safeFilename = originalFilename.replaceAll("[^a-zA-Z0-9\\.\\-_]", "_");
-            String filename = System.currentTimeMillis() + "_" + safeFilename;
-
-            // 画像読み込み
-            BufferedImage originalImage = ImageIO.read(imageFile.getInputStream());
-
-            // ターゲットサイズ（正方形360x360）
-            int targetSize = 360;
-
-            // 元画像の縦横比を計算
-            int originalWidth = originalImage.getWidth();
-            int originalHeight = originalImage.getHeight();
-
-            // トリミングする領域のサイズと開始位置（中心から正方形で切り抜く）
-            int cropSize;
-            int cropStartX;
-            int cropStartY;
-
-            if (originalWidth > originalHeight) {
-                cropSize = originalHeight;
-                cropStartX = (originalWidth - cropSize) / 2;
-                cropStartY = 0;
-            } else {
-                cropSize = originalWidth;
-                cropStartX = 0;
-                cropStartY = (originalHeight - cropSize) / 2;
-            }
-
-            // 中心の正方形を切り抜く
-            BufferedImage croppedImage = originalImage.getSubimage(cropStartX, cropStartY, cropSize, cropSize);
-
-            // リサイズ画像作成
-            BufferedImage resizedImage = new BufferedImage(targetSize, targetSize, BufferedImage.TYPE_INT_RGB);
-
-            Graphics2D g = resizedImage.createGraphics();
-            g.setComposite(AlphaComposite.Src);
-            g.setColor(Color.WHITE);  // 背景白で塗りつぶし（透過を白に変換）
-            g.fillRect(0, 0, targetSize, targetSize);
-            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            g.drawImage(croppedImage, 0, 0, targetSize, targetSize, null);
-            g.dispose();
-
-            File dest = new File(dir, filename);
-
-            // JPEGで保存
-            ImageIO.write(resizedImage, "jpg", dest);
-
-            // Userエンティティにセット
-            currentUser.setImage(filename);
-        }
-
-        userService.updateProfile(currentUser);
-
-        return "redirect:/";
+    User currentUser = userService.getCurrentUser(session);
+    if (currentUser == null) {
+        return "redirect:/login";
     }
+
+    // 画像がアップロードされていない場合、フォームの画像名がnullまたは空なら
+    // 現ユーザーの画像名をフォームにセットしておく（バリデーションエラー時の再表示用）
+    if ((form.getImage() == null || form.getImage().isEmpty())
+         && (form.getImageFilename() == null || form.getImageFilename().isEmpty())) {
+        form.setImageFilename(currentUser.getImage());
+    }
+
+    if (bindingResult.hasErrors()) {
+        // エラー時はフォームの画像ファイル名をセットしたまま再表示するため、
+        // currentUserの画像名が空でなければフォームにセット（2回目以降の画面表示で消えないように）
+        if (form.getImageFilename() == null || form.getImageFilename().isEmpty()) {
+            form.setImageFilename(currentUser.getImage());
+        }
+        return "profile_edit";
+    }
+
+    // 自己紹介更新
+    currentUser.setBio(form.getBio());
+
+    MultipartFile imageFile = form.getImage();
+    if (imageFile != null && !imageFile.isEmpty()) {
+        // 以下画像保存処理はそのまま
+        File dir = new File(uploadPath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        String originalFilename = imageFile.getOriginalFilename();
+        String safeFilename = originalFilename.replaceAll("[^a-zA-Z0-9\\.\\-_]", "_");
+        String filename = System.currentTimeMillis() + "_" + safeFilename;
+
+        BufferedImage originalImage = ImageIO.read(imageFile.getInputStream());
+
+        int targetSize = 360;
+
+        int originalWidth = originalImage.getWidth();
+        int originalHeight = originalImage.getHeight();
+
+        int cropSize;
+        int cropStartX;
+        int cropStartY;
+
+        if (originalWidth > originalHeight) {
+            cropSize = originalHeight;
+            cropStartX = (originalWidth - cropSize) / 2;
+            cropStartY = 0;
+        } else {
+            cropSize = originalWidth;
+            cropStartX = 0;
+            cropStartY = (originalHeight - cropSize) / 2;
+        }
+
+        BufferedImage croppedImage = originalImage.getSubimage(cropStartX, cropStartY, cropSize, cropSize);
+
+        BufferedImage resizedImage = new BufferedImage(targetSize, targetSize, BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g = resizedImage.createGraphics();
+        g.setComposite(AlphaComposite.Src);
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, targetSize, targetSize);
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.drawImage(croppedImage, 0, 0, targetSize, targetSize, null);
+        g.dispose();
+
+        File dest = new File(dir, filename);
+
+        ImageIO.write(resizedImage, "jpg", dest);
+
+        currentUser.setImage(filename);
+    }
+
+    userService.updateProfile(currentUser);
+
+    return "redirect:/";
+  }
 }
