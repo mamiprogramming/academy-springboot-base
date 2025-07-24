@@ -314,12 +314,11 @@ form button.login-button {
   top: 52px;
   left: 440px;
   width: 520px;
-  height: 256px;
   box-sizing: border-box;
-  padding: 16px;
+  padding: 16px 16px 16px 4px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: flex-start;
 }
 
 /* 自己紹介見出し（左上） */
@@ -341,7 +340,6 @@ form button.login-button {
   padding-left: 4px;
   padding-top: 4px;
   box-sizing: border-box;
-  margin-bottom: 16px;
 }
 
 /* 自己紹介テキスト */
@@ -354,9 +352,7 @@ form button.login-button {
 
 /* 編集ボタン */
 button.button_blue.edit-button {
-  position: absolute;
-  top: 203px;
-  left: -2px;
+  left: 0;               /* ← ここで左端に固定 */
   width: 242px;
   height: 53px;
   padding-top: 16px;
@@ -385,16 +381,12 @@ button.button_blue.edit-button:hover {
 
 /* 自己紹介テキストボックス */
 .intro-middle-box {
-  position: absolute;
-  top: 90px;
-  left: 0;
-  width: 520px;
-  height: 81px;
+  margin-top:90px; /* 58px（intro-box高さ） + 32px（余白） */
+  min-height: 145px; /* 初期の高さを固定 */
+  width: 100%;
+  padding-left: 0; /* 余計な内側余白はなし */
   box-sizing: border-box;
-  padding: 0 8px 0 0; 
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  margin-bottom: 32px;
 }
 
 .intro-middle-box p {
@@ -495,7 +487,7 @@ button.button_blue.edit-button:hover {
   padding: 16px 40px;
   border-radius: 4px;
   background-color: #1B5678;
-  color: #fff;
+  color: #FFFFFF;
   border: none;
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
@@ -506,6 +498,9 @@ button.button_blue.edit-button:hover {
   box-sizing: border-box;
   text-align: center;
   transition: background-color 0.3s ease;
+  display: block;        /* ブロック化して横幅や上下の配置を安定させる */
+  margin-top: 32px;      /* 自己紹介文との間に余白 */
+  position: static;   /* ← 絶対配置を解除する */
 }
 
 .edit-learning-chart-button:hover {
