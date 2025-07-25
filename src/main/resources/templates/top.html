@@ -1,29 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
   <meta charset="UTF-8" />
   <title>TOPページ</title>
+
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+    crossorigin="anonymous" />
 
   <!-- 共通CSS -->
   <link rel="stylesheet" th:href="@{/css/style.css}" />
 
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
 </head>
 
 <body>
-
   <div class="wrapper">
-    <!-- ヘッダー読み込み -->
+    <!-- ヘッダー -->
     <header th:replace="~{common/header :: header}"></header>
 
     <main class="profile-section">
       <div class="profile-content">
+        <!-- プロフィール全体 -->
         <div class="profile-intro">
+          <!-- プロフィール画像 -->
           <div class="profile-image-wrapper">
             <th:block th:if="${image != null}">
               <img th:src="@{/uploads/{filename}(filename=${image})}" alt="プロフィール画像" />
@@ -33,40 +37,42 @@
             </th:block>
           </div>
 
-          <!-- 名前ボックス -->
+          <!-- 名前 -->
           <div class="profile-name-box">
             <p th:text="${profileName}">名前</p>
           </div>
 
+          <!-- 自己紹介・編集ボタン -->
           <div class="profile-right-box">
-              <div class="intro-box">自己紹介</div>
-              <div class="intro-middle-box">
-                <p th:text="${bio}">自己紹介がここに表示されます</p>
-              </div>
-              <button class="button_blue edit-button" onclick="location.href='/profile/edit'">
-                自己紹介を編集する
-              </button>
-          </div>
+            <div class="intro-box">自己紹介</div>
 
-          <!-- 学習チャートボックス -->
-          <!-- <div class="learning-chart-box">
+            <div class="intro-middle-box">
+              <p th:text="${bio}">自己紹介がここに表示されます</p>
+            </div>
+
+            <button class="button_blue edit-button" onclick="location.href='/profile/edit'">
+              自己紹介を編集する
+            </button>
+
+            <!-- 学習チャート -->
+            <div class="learning-chart-box">
               <div class="learning-chart-inner-box">
-                  <div class="learning-chart-title-box">
-                    <p>学習チャート</p>
-                  </div>
-                  <button class="button_blue edit-learning-chart-button" onclick="location.href='/skill/edit'">
-                    編集する
-                  </button>
+                <div class="learning-chart-title-box">
+                  <p>学習チャート</p>
+                </div>
+                <button class="button_blue edit-learning-chart-button" onclick="location.href='/skill/edit'">
+                  編集する
+                </button>
               </div>
-          </div> -->
-        </div>
-      </div>
+            </div>
+
+          </div> <!-- profile-right-box -->
+        </div> <!-- profile-intro -->
+      </div> <!-- profile-content -->
     </main>
 
-    <!-- フッター読み込み -->
+    <!-- フッター -->
     <footer class="footer-custom" th:replace="common/footer :: footer"></footer>
   </div>
-
 </body>
-
 </html>
