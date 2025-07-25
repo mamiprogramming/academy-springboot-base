@@ -266,7 +266,8 @@ form button.login-button {
 .profile-content {
   width: 100%;
   max-width: 960px;
-  height: 582px;
+  /* height: 582px; */
+  height: auto; /* ← 固定高さを解除 */
   margin: 0 auto;
   box-sizing: border-box;
   display: flex;
@@ -278,7 +279,8 @@ form button.login-button {
 .profile-intro {
   width: 100%;
   max-width: 960px;
-  height: 360px;
+  /* height: 360px; */
+  height: auto; /* ← 固定高さを解除 */
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -286,6 +288,8 @@ form button.login-button {
   position: relative;
   padding-left: 0;
   padding-bottom: 0;
+  height: auto; /* ← 固定高さを解除 */
+  align-items: flex-start; /* 画像と右側を上揃えに変更（必要に応じて） */
 }
 
 /* プロフィール画像 */
@@ -434,13 +438,13 @@ button.button_blue.edit-button:hover {
 
 /* 学習チャート全体ボックス */
 .learning-chart-box {
-  position: absolute;
+  position: static;
   top: 480px;
   left: 50%;
   transform: translateX(-50%);
   width: 960px;
   height: 331px;
-  box-sizing: border-box;
+  margin-top: 120px;
 }
 
 /* タイトル＋ボタンの親ボックス */
@@ -452,7 +456,7 @@ button.button_blue.edit-button:hover {
   flex-direction: column;
   justify-content: center; /* 縦中央揃え */
   align-items: center;     /* 横中央揃え */
-  gap: 40px;
+  gap: 8px;
   box-sizing: border-box;
 }
 
@@ -466,7 +470,7 @@ button.button_blue.edit-button:hover {
   gap: 16px;
   border-bottom: 2px solid rgba(0, 0, 0, 0.5);
   box-sizing: border-box;
-  padding-bottom: 4px;
+  padding-bottom: 16px;  
 }
 
 /* タイトルテキスト */
@@ -484,7 +488,7 @@ button.button_blue.edit-button:hover {
 .edit-learning-chart-button {
   width: 152px;
   height: 53px;
-  padding: 16px 40px;
+  padding: 0; /* paddingは一旦0に */ 
   border-radius: 4px;
   background-color: #1B5678;
   color: #FFFFFF;
@@ -492,7 +496,7 @@ button.button_blue.edit-button:hover {
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-size: 18px;
-  line-height: 100%;
+  line-height: 53px; /* ボタンの高さと同じにして縦中央 */
   letter-spacing: 0%;
   cursor: pointer;
   box-sizing: border-box;
