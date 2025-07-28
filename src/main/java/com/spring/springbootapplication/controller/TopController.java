@@ -17,34 +17,46 @@ public class TopController {
     @GetMapping("/top")
     public String showTopPage(Model model, HttpSession session) {
         Object loginUser = session.getAttribute("loginUser");
-        if (loginUser == null) {
+        if (!(loginUser instanceof User user)) {
             return "redirect:/login";
         }
-        
-        // ログイン中ユーザー情報を取り出す
-        User user = (User) loginUser;
+
         model.addAttribute("loginUser", user);
         model.addAttribute("profileName", user.getName());
         model.addAttribute("bio", user.getBio());
         model.addAttribute("isLoginPage", false);
 
-        // 画像バイナリがあればtrueを渡す
-        model.addAttribute("hasImageData", user.getImageData() != null);
+        // 画像があるかフラグ
+        boolean hasImage = user.getImageData() != null && user.getImageData().length > 0;
+        model.addAttribute("hasImageData", hasImage);
 
         return "top";
     }
 
-    // プロフィール画像をバイナリで返すAPI
+    // プロフィール画像を返す（画像がない場合も透明の空画像で返す）
     @GetMapping("/profile/image")
     @ResponseBody
     public ResponseEntity<byte[]> getProfileImage(HttpSession session) {
-        User user = (User) session.getAttribute("loginUser");
-        if (user == null || user.getImageData() == null) {
-            return ResponseEntity.notFound().build();
+        Object loginUser = session.getAttribute("loginUser");
+
+        if (!(loginUser instanceof User user)) {
+            return transparentImageResponse();
         }
+
+        byte[] imageData = user.getImageData();
+        if (imageData == null || imageData.length == 0) {
+            return transparentImageResponse();
+        }
+
         HttpHeaders headers = new HttpHeaders();
-        // 画像の種類に応じてMediaTypeを変える（ここはPNG想定）
         headers.setContentType(MediaType.IMAGE_PNG);
-        return ResponseEntity.ok().headers(headers).body(user.getImageData());
+        return ResponseEntity.ok().headers(headers).body(imageData);
+    }
+
+    // 空の透明画像（0バイト PNG）を返す
+    private ResponseEntity<byte[]> transparentImageResponse() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        return ResponseEntity.ok().headers(headers).body(new byte[0]);
     }
 }
