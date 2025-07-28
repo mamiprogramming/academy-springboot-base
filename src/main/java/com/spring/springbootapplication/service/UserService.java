@@ -16,23 +16,38 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    // ユーザー登録
+    /**
+     * セッションからログイン中ユーザーを取得
+     * @param session HttpSession
+     * @return ログインユーザーオブジェクト（無ければnull）
+     */
+    public User getCurrentUser(HttpSession session) {
+        return (User) session.getAttribute("loginUser");
+    }
+
+    /**
+     * 新規ユーザー登録
+     * トランザクション管理付き
+     */
     @Transactional
     public void registerUser(User user) {
         userMapper.insertUser(user);
     }
 
-    // メールアドレスで検索
+    /**
+     * メールアドレスでユーザー検索
+     * @param email 検索したいメールアドレス
+     * @return 該当ユーザー（なければnull）
+     */
     public User findByEmail(String email) {
         return userMapper.findByEmail(email);
     }
 
-    // ログイン中のユーザーをHttpSessionから取得
-    public User getCurrentUser(HttpSession session) {
-        return (User) session.getAttribute("loginUser");
-    }
-
-    // 自己紹介・画像の更新
+    /**
+     * 自己紹介や画像などのプロフィール更新
+     * トランザクション管理付き
+     * @param user 更新するUserオブジェクト
+     */
     @Transactional
     public void updateProfile(User user) {
         userMapper.updateUserProfile(user);

@@ -1,8 +1,6 @@
 package com.spring.springbootapplication.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
 import org.springframework.web.multipart.MultipartFile;
 
 public class ProfileEditForm {
@@ -10,10 +8,10 @@ public class ProfileEditForm {
     @Size(min = 50, max = 200, message = "自己紹介は50文字以上200文字以下で入力してください")
     private String bio;
 
-    // 画像ファイル（アップロード用）
+    // アップロード画像ファイル
     private MultipartFile image;
 
-    // 編集時に既存の画像ファイル名を保持するためのフィールド
+    // 画像ファイル名（画面表示用、DB登録用）
     private String imageFilename;
 
     // getter/setter
