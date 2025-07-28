@@ -16,6 +16,6 @@ public interface UserMapper {
     User findByEmail(String email);
 
     // 自己紹介と画像の更新
-    @Update("UPDATE users SET bio = #{bio}, image = #{image} WHERE email = #{email}")
+    @Update("UPDATE users SET bio = #{bio}, image = #{image}, image_data = #{imageData} WHERE email = #{email}")
     void updateUserProfile(User user);
 }
