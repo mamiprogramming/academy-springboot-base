@@ -302,6 +302,15 @@ form button.login-button {
   flex-shrink: 0;
 }
 
+.profile-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 0; /* img自体は丸くしない */
+  display: block;
+}
+
 /* 自己紹介テキスト全体の親 */
 .intro-text {
   margin-left: 20px;

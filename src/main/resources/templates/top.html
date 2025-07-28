@@ -29,12 +29,7 @@
         <div class="profile-intro">
           <!-- プロフィール画像 -->
           <div class="profile-image-wrapper">
-            <th:block th:if="${image != null}">
-              <img th:src="@{/uploads/{filename}(filename=${image})}" alt="プロフィール画像" />
-            </th:block>
-            <th:block th:if="${image == null}">
-              <div class="profile-image-placeholder"></div>
-            </th:block>
+            <img th:src="@{/profile/image}" alt="プロフィール画像" />
           </div>
 
           <!-- 名前 -->
