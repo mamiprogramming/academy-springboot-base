@@ -12,7 +12,7 @@ public interface UserMapper {
     @Insert("INSERT INTO users (name, email, password) VALUES (#{name}, #{email}, #{password})")
     void insertUser(User user);
 
-    @Select("SELECT * FROM users WHERE email = #{email}")
+    @Select("SELECT id, name, email, password, bio, image, image_data AS imageData FROM users WHERE email = #{email}")
     User findByEmail(String email);
 
     // 自己紹介と画像の更新
