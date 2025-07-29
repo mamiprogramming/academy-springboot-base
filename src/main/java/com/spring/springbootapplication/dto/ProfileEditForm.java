@@ -12,7 +12,7 @@ public class ProfileEditForm {
     private MultipartFile image;
 
     // 画像ファイル名（画面表示用、DB登録用）
-    private String imageFilename;
+    private String imageFilename = ""; // null回避のため空文字で初期化しても良い
 
     // getter/setter
     public String getBio() {

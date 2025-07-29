@@ -36,15 +36,14 @@
 
           <!-- ファイル選択ボタンとファイル名表示 -->
           <div class="file-upload-area d-flex align-items-center gap-3">
-            <input type="file" id="image" name="image" class="visually-hidden" onchange="updateFileName(this)">
+            <!-- Springのフォームバインドに合わせる -->
+            <input type="file" id="image" th:field="*{image}" class="visually-hidden" onchange="updateFileName(this)">
             <button type="button" class="custom-file-btn" onclick="document.getElementById('image').click();">
               画像ファイルを添付する
             </button>
-            <span id="file-name" class="file-name-text" th:text="${profileEditForm.imageFilename} ?: 'ファイル未選択'"></span>
+            <span id="file-name" class="file-name-text"
+                  th:text="${profileEditForm.imageFilename} ?: ''"></span>
           </div>
-
-          <!-- hiddenで現在の画像ファイル名を保持 -->
-          <input type="hidden" name="imageFilename" id="hidden-filename" th:value="${profileEditForm.imageFilename}" />
 
           <!-- 送信ボタン -->
           <div class="text-center pt-3">
@@ -63,14 +62,11 @@
     // ファイル選択時にファイル名表示とhiddenにセット
     function updateFileName(input) {
       const fileNameSpan = document.getElementById('file-name');
-      const hiddenInput = document.getElementById('hidden-filename');
       const file = input.files[0];
       if (file) {
         fileNameSpan.textContent = file.name;
-        hiddenInput.value = file.name;
       } else {
         fileNameSpan.textContent = 'ファイル未選択';
-        hiddenInput.value = '';
       }
     }
   </script>
