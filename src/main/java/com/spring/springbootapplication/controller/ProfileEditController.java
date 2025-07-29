@@ -25,6 +25,7 @@ public class ProfileEditController {
         this.userService = userService;
     }
 
+    // 編集画面表示(GET)
     @GetMapping("/edit")
     public String showEditForm(Model model, HttpSession session) {
         User currentUser = userService.getCurrentUser(session);
@@ -34,12 +35,20 @@ public class ProfileEditController {
 
         ProfileEditForm form = new ProfileEditForm();
         form.setBio(currentUser.getBio());
-        form.setImageFilename(currentUser.getImageFilename());
+
+        // セッションに一時保存された画像があれば優先表示
+        if (session.getAttribute("tempImageFilename") != null) {
+            form.setImageFilename((String) session.getAttribute("tempImageFilename"));
+        } else {
+            // なければDBの画像ファイル名を表示
+            form.setImageFilename(currentUser.getImageFilename());
+        }
 
         model.addAttribute("profileEditForm", form);
         return "profile_edit";
     }
 
+    // 編集内容送信(POST)
     @PostMapping("/edit")
     public String submitEdit(
             @Valid @ModelAttribute("profileEditForm") ProfileEditForm form,
@@ -53,12 +62,15 @@ public class ProfileEditController {
         }
 
         MultipartFile uploadedImage = form.getImage();
+
+        // アップロードされた画像があればセッションに保存（バリデーションエラー時に使う）
         if (uploadedImage != null && !uploadedImage.isEmpty()) {
             session.setAttribute("tempImageData", uploadedImage.getBytes());
             session.setAttribute("tempImageFilename", uploadedImage.getOriginalFilename());
         }
 
         if (bindingResult.hasErrors()) {
+            // バリデーションエラー時は画像ファイル名を消さない
             if (session.getAttribute("tempImageFilename") != null) {
                 form.setImageFilename((String) session.getAttribute("tempImageFilename"));
             } else {
@@ -67,8 +79,10 @@ public class ProfileEditController {
             return "profile_edit";
         }
 
+        // 自己紹介を更新
         currentUser.setBio(form.getBio());
 
+        // 画像データはセッションから取得（アップロードあれば）
         byte[] imageData = (byte[]) session.getAttribute("tempImageData");
         String imageFilename = (String) session.getAttribute("tempImageFilename");
 
@@ -76,11 +90,16 @@ public class ProfileEditController {
             currentUser.setImageData(imageData);
             currentUser.setImageFilename(imageFilename);
             form.setImageFilename(imageFilename);
+        } else {
+            // 画像アップロードがないなら既存のまま維持
+            form.setImageFilename(currentUser.getImageFilename());
         }
 
+        // セッションの画像情報はクリア
         session.removeAttribute("tempImageData");
         session.removeAttribute("tempImageFilename");
 
+        // DB更新
         userService.updateProfile(currentUser);
 
         return "redirect:/";
