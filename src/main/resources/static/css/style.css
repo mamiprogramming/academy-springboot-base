@@ -299,20 +299,13 @@ form button.login-button {
   border-radius: 50%;
   overflow: hidden;
   background-color: #C4C4C4;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   flex-shrink: 0;
 }
 
 .profile-image-wrapper img {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  object-position: center center;
-  border-radius: 0; /* img自体は丸くしない */
+  width: 360px;
+  height: 360px;
+  object-fit: fill; /* 比率を無視して全体を360×360に */
   display: block;
 }
 
