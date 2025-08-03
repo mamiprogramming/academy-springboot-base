@@ -29,7 +29,7 @@ public class LearningChartController {
      * 学習チャート表示ページ
      * 初期表示 or 月変更後に使用
      */
-    @GetMapping("/chart")
+    @GetMapping("/skill/edit")
     public String showChartPage(@RequestParam(value = "month", required = false) String month,
                                  HttpSession session,
                                  Model model) {

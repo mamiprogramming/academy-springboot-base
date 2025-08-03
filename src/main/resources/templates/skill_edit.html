@@ -2,9 +2,50 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
-  <title>学習チャート編集（簡易）</title>
+  <title>スキル編集</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
-<body>
-  <h1>学習チャートを編集する（簡易）</h1>
+<body class="container mt-4">
+
+  <h1>学習チャート編集</h1>
+
+  <!-- 月選択プルダウン -->
+  <form method="get" action="/chart" class="mb-3">
+    <label for="monthSelect" class="form-label">表示する月：</label>
+    <select id="monthSelect" name="month" class="form-select" onchange="this.form.submit()">
+      <option th:each="m : ${availableMonths}"
+              th:value="${m}"
+              th:text="${m}"
+              th:selected="${m} == ${selectedMonth}">
+      </option>
+    </select>
+  </form>
+
+  <!-- 学習データ一覧 -->
+  <table class="table table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th>スキル名</th>
+        <th>レベル</th>
+        <th>コメント</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="data : ${learningDataList}">
+        <td th:text="${data.skillName}">スキル名</td>
+        <td th:text="${data.level}">レベル</td>
+        <td th:text="${data.comment}">コメント</td>
+      </tr>
+      <tr th:if="${learningDataList.size()} == 0">
+        <td colspan="3" class="text-center">データがありません</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 将来の編集用スペース -->
+  <div class="mt-4">
+    <button class="btn btn-secondary" disabled>スキルを追加（準備中）</button>
+  </div>
+
 </body>
 </html>
