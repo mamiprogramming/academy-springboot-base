@@ -50,11 +50,20 @@ public class LearningChartController {
 
         // プルダウン用の年月リストを取得
         List<String> availableMonths = learningChartService.getAvailableMonths();
+        
+        // 月表示ラベルリストを作る
+        List<String> availableMonthsLabel = availableMonths.stream()
+            .map(m -> {
+                int monthNum = Integer.parseInt(m.substring(5,7));
+                return monthNum + "月";
+            })
+            .toList();
 
         // Viewに渡すデータをModelに追加
         model.addAttribute("learningDataList", dataList);
         model.addAttribute("selectedMonth", month);
         model.addAttribute("availableMonths", availableMonths);
+        model.addAttribute("availableMonthsLabel", availableMonthsLabel);
 
         return "skill_edit"; // 表示先のHTMLテンプレート
     }

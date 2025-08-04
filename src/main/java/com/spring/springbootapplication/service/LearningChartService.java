@@ -38,7 +38,7 @@ public class LearningChartService {
         LocalDate now = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
 
-        for (int i = 0; i <= 3; i++) {
+        for (int i = 0; i < 3; i++) {
             LocalDate targetDate = now.minusMonths(i);
             months.add(targetDate.format(formatter));
         }
