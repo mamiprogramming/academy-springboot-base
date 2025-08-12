@@ -24,21 +24,37 @@
     <!-- ヘッダー -->
     <header th:replace="~{common/header :: header}"></header>
 
-    <main class="container mt-4">
+    <main class="learning-chart-wrapper">
 
       <!-- 月選択プルダウン -->
-      <form method="get" action="/chart" class="mb-3">
-        <select id="monthSelect" name="month" class="form-select" onchange="this.form.submit()">
-          <option th:each="m, iterStat : ${availableMonths}"
-                  th:value="${m}"
-                  th:text="${availableMonthsLabel[iterStat.index]}"
-                  th:selected="${m} == ${selectedMonth}">
-          </option>
-        </select>
+      <form method="get" action="/chart" class="month-select-form" id="monthForm">
+        <div class="month-dd">
+          <!-- 表示中（月のボタン） -->
+          <button type="button" class="month-toggle" aria-haspopup="listbox" aria-expanded="false" id="monthToggle">
+            <span class="num"
+                  th:text="${selectedMonthLabel != null ? #strings.substring(selectedMonthLabel, 0, #strings.length(selectedMonthLabel) - 1) : ''}">3</span>月
+          </button>
+          
+          <ul class="month-menu" role="listbox" aria-labelledby="monthToggle" hidden>
+            <li th:each="m, iterStat : ${availableMonths}">
+              <button type="button"
+                      class="month-item"
+                      th:data-value="${m}"
+                      role="option"
+                      th:aria-selected="${m} == ${selectedMonth}">
+                <span class="num"
+                      th:text="${availableMonthsLabel[iterStat.index] != null ? #strings.substring(availableMonthsLabel[iterStat.index], 0, #strings.length(availableMonthsLabel[iterStat.index]) - 1) : ''}">3</span>月
+              </button>
+            </li>
+          </ul>
+      
+          <!-- 実際に送る値 -->
+          <input type="hidden" name="month" id="monthHidden" th:value="${selectedMonth}">
+        </div>
       </form>
 
       <!-- 学習データ一覧 -->
-      <section class="category-box mb-4 p-3 border rounded">
+      <section class="category-box">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h2>バックエンド</h2>
           <button type="button" class="btn btn-secondary btn-sm" disabled>項目を追加する</button>
@@ -107,7 +123,7 @@
       </section>
     
       <!-- フロントエンドカテゴリー -->
-      <section class="category-box mb-4 p-3 border rounded">
+      <section class="category-box">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h2>フロントエンド</h2>
           <button type="button" class="btn btn-secondary btn-sm" disabled>項目を追加する</button>
@@ -159,7 +175,7 @@
       </section>
     
       <!-- インフラカテゴリー -->
-      <section class="category-box mb-4 p-3 border rounded">
+      <section class="category-box">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h2>インフラ</h2>
           <button type="button" class="btn btn-secondary btn-sm" disabled>項目を追加する</button>
@@ -232,5 +248,61 @@
     <footer th:replace="common/footer :: footer"></footer>
 
   </div>
+  <script>
+    (() => {
+      const dd = document.querySelector('.month-dd');
+      if (!dd) return;
+      const toggle = dd.querySelector('.month-toggle');
+      const menu = dd.querySelector('.month-menu');
+      const hidden = document.getElementById('monthHidden');
+      const form = document.getElementById('monthForm');
+    
+      toggle.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!open));
+        menu.hidden = open;
+        if (!open) {
+          const first = menu.querySelector('.month-item');
+          first && first.focus();
+        }
+      });
+    
+      menu.addEventListener('click', (e) => {
+        const btn = e.target.closest('.month-item');
+        if (!btn) return;
+        hidden.value = btn.dataset.value;
+        const num = btn.querySelector('.num')?.textContent || '';
+        toggle.querySelector('.num').textContent = num;
+        menu.hidden = true;
+        toggle.setAttribute('aria-expanded','false');
+        form.submit();
+      });
+    
+      document.addEventListener('click', (e) => {
+        if (!dd.contains(e.target)) {
+          menu.hidden = true;
+          toggle.setAttribute('aria-expanded','false');
+        }
+      });
+    
+      dd.addEventListener('keydown', (e) => {
+        const items = Array.from(menu.querySelectorAll('.month-item'));
+        const idx = items.indexOf(document.activeElement);
+        if (e.key === 'Escape') {
+          menu.hidden = true; toggle.setAttribute('aria-expanded','false'); toggle.focus();
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          const next = items[Math.min(idx + 1, items.length - 1)] || items[0];
+          next.focus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          const prev = items[Math.max(idx - 1, 0)] || items[items.length - 1];
+          prev.focus();
+        } else if (e.key === 'Enter' && document.activeElement.classList.contains('month-item')) {
+          document.activeElement.click();
+        }
+      });
+    })();
+    </script>
 </body>
 </html>
