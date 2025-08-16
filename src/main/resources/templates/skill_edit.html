@@ -53,193 +53,98 @@
         </div>
       </form>
 
-      <!-- 学習データ一覧 -->
+<!-- バックエンド -->
+<section class="category-box">
+  <div class="category-content">
+
+    <!-- タイトル＋ボタン行（.category-content の子） -->
+    <div class="category-row title-row">
+      <div class="category-title-box">
+        <span class="category-title-text">バックエンド</span>
+      </div>
+      <button type="button" class="add-item-btn" disabled>項目を追加する</button>
+    </div>
+
+    <!-- 項目エリア（.category-content の中に収める） -->
+    <div class="items-panel">
+      <!-- 左に2つ並ぶラベル -->
+      <div class="items-controls">
+        <div class="control-box">項目名</div>
+        <div class="control-box">学習時間</div>
+      </div>
+
+      <!-- ここだけ縦スクロール。3件分の高さ固定 -->
+      <div class="items-list">
+        <div class="item-row" th:each="d : ${learningDataList}">
+          <div class="cell name-cell">
+            <span class="item-text" th:text="${d.item}">Ruby</span>
+          </div>
+
+          <div class="cell time-cell">
+            <div class="learning-time-box">
+              <span class="learning-time-text"
+                    th:text="${d.learningTime != null ? d.learningTime : d.learning_time}">0</span>
+              <div class="learning-time-dropdown">
+                <button type="button" class="time-up" aria-label="増やす"><div class="triangle-up"></div></button>
+                <button type="button" class="time-down" aria-label="減らす"><div class="triangle-down"></div></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="cell save-cell">
+            <button class="btn-save" type="button">学習時間を保存する</button>
+          </div>
+          <div class="cell delete-cell">
+            <button class="btn btn-delete" type="button">削除する</button>
+          </div>
+        </div>
+      </div>
+</section>
+
+      <!-- フロントエンド -->
       <section class="category-box">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h2>バックエンド</h2>
+        <div class="category-title-wrapper">
+          <h2 class="category-title">フロントエンド</h2>
           <button type="button" class="btn btn-secondary btn-sm" disabled>項目を追加する</button>
         </div>
-        <table class="table table-borderless">
-          <thead>
-            <tr>
-              <th>項目名</th>
-              <th>学習時間</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Ruby</td>
-              <td>
-                <select class="form-select w-auto" disabled>
-                  <!-- 0分～120分 -->
-                  <option>0</option>
-                  <option selected>60</option>
-                  <option>120</option>
-                </select>
-              </td>
-              <td>
-                <button type="button" class="btn btn-primary btn-sm" disabled>学習時間を保存する</button>
-              </td>
-              <td>
-                <button type="button" class="btn btn-danger btn-sm" disabled>削除する</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Rails</td>
-              <td>
-                <select class="form-select w-auto" disabled>
-                  <option>0</option>
-                  <option>30</option>
-                  <option selected>90</option>
-                </select>
-              </td>
-              <td>
-                <button type="button" class="btn btn-primary btn-sm" disabled>学習時間を保存する</button>
-              </td>
-              <td>
-                <button type="button" class="btn btn-danger btn-sm" disabled>削除する</button>
-              </td>
-            </tr>
-            <tr>
-              <td>MySQL</td>
-              <td>
-                <select class="form-select w-auto" disabled>
-                  <option>0</option>
-                  <option>30</option>
-                  <option selected>90</option>
-                </select>
-              </td>
-              <td>
-                <button type="button" class="btn btn-primary btn-sm" disabled>学習時間を保存する</button>
-              </td>
-              <td>
-                <button type="button" class="btn btn-danger btn-sm" disabled>削除する</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="category-content">
+          <table class="table table-borderless">
+            <thead>
+              <tr>
+                <th>項目名</th>
+                <th>学習時間</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 学習データ行 -->
+            </tbody>
+          </table>
+        </div>
       </section>
-    
-      <!-- フロントエンドカテゴリー -->
+
+      <!-- インフラ -->
       <section class="category-box">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h2>フロントエンド</h2>
+        <div class="category-title-wrapper">
+          <h2 class="category-title">インフラ</h2>
           <button type="button" class="btn btn-secondary btn-sm" disabled>項目を追加する</button>
         </div>
-        <table class="table table-borderless">
-          <thead>
-            <tr>
-              <th>項目名</th>
-              <th>学習時間</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>HTML</td>
-              <td>
-                <select class="form-select w-auto" disabled>
-                  <option selected>45</option>
-                  <option>60</option>
-                  <option>90</option>
-                </select>
-              </td>
-              <td>
-                <button type="button" class="btn btn-primary btn-sm" disabled>学習時間を保存する</button>
-              </td>
-              <td>
-                <button type="button" class="btn btn-danger btn-sm" disabled>削除する</button>
-              </td>
-            </tr>
-            <tr>
-              <td>CSS</td>
-              <td>
-                <select class="form-select w-auto" disabled>
-                  <option>0</option>
-                  <option selected>75</option>
-                  <option>120</option>
-                </select>
-              </td>
-              <td>
-                <button type="button" class="btn btn-primary btn-sm" disabled>学習時間を保存する</button>
-              </td>
-              <td>
-                <button type="button" class="btn btn-danger btn-sm" disabled>削除する</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-    
-      <!-- インフラカテゴリー -->
-      <section class="category-box">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h2>インフラ</h2>
-          <button type="button" class="btn btn-secondary btn-sm" disabled>項目を追加する</button>
+        <div class="category-content">
+          <table class="table table-borderless">
+            <thead>
+              <tr>
+                <th>項目名</th>
+                <th>学習時間</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 学習データ行 -->
+            </tbody>
+          </table>
         </div>
-        <table class="table table-borderless">
-          <thead>
-            <tr>
-              <th>項目名</th>
-              <th>学習時間</th>
-              <th></th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Heroku</td>
-              <td>
-                <select class="form-select w-auto" disabled>
-                  <option>0</option>
-                  <option>30</option>
-                  <option selected>60</option>
-                </select>
-              </td>
-              <td>
-                <button type="button" class="btn btn-primary btn-sm" disabled>学習時間を保存する</button>
-              </td>
-              <td>
-                <button type="button" class="btn btn-danger btn-sm" disabled>削除する</button>
-              </td>
-            </tr>
-            <tr>
-              <td>AWS</td>
-              <td>
-                <select class="form-select w-auto" disabled>
-                  <option selected>15</option>
-                  <option>30</option>
-                  <option>45</option>
-                </select>
-              </td>
-              <td>
-                <button type="button" class="btn btn-primary btn-sm" disabled>学習時間を保存する</button>
-              </td>
-              <td>
-                <button type="button" class="btn btn-danger btn-sm" disabled>削除する</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Firebase</td>
-              <td>
-                <select class="form-select w-auto" disabled>
-                  <option>0</option>
-                  <option>30</option>
-                  <option selected>60</option>
-                </select>
-              </td>
-              <td>
-                <button type="button" class="btn btn-primary btn-sm" disabled>学習時間を保存する</button>
-              </td>
-              <td>
-                <button type="button" class="btn btn-danger btn-sm" disabled>削除する</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
       </section>
 
     </main>
@@ -248,6 +153,7 @@
     <footer th:replace="common/footer :: footer"></footer>
 
   </div>
+
   <script>
     (() => {
       const dd = document.querySelector('.month-dd');
@@ -303,6 +209,6 @@
         }
       });
     })();
-    </script>
+  </script>
 </body>
 </html>
