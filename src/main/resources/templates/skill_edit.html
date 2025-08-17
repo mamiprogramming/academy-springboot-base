@@ -2,9 +2,200 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
-  <title>学習チャート編集（簡易）</title>
+  <title>スキル編集</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous" />
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+          crossorigin="anonymous"></script>
 </head>
+
 <body>
-  <h1>学習チャートを編集する（簡易）</h1>
+  <div class="wrapper">
+
+    <!-- ヘッダー -->
+    <header th:replace="~{common/header :: header}"></header>
+
+    <main class="learning-chart-wrapper">
+
+      <!-- 月選択プルダウン -->
+      <form method="get" action="/skill/edit" class="month-select-form" id="monthForm">
+        <div class="month-dd">
+          <!-- 表示中（月のボタン） -->
+          <button type="button" class="month-toggle" aria-haspopup="listbox" aria-expanded="false" id="monthToggle">
+            <span class="num"
+                  th:text="${selectedMonthLabel != null ? #strings.substring(selectedMonthLabel, 0, #strings.length(selectedMonthLabel) - 1) : ''}">3</span>月
+          </button>
+          
+          <ul class="month-menu" role="listbox" aria-labelledby="monthToggle" hidden>
+            <li th:each="m, iterStat : ${availableMonths}">
+              <button type="button"
+                      class="month-item"
+                      th:data-value="${m}"
+                      role="option"
+                      th:aria-selected="${m} == ${selectedMonth}">
+                <span class="num"
+                      th:text="${availableMonthsLabel[iterStat.index] != null ? #strings.substring(availableMonthsLabel[iterStat.index], 0, #strings.length(availableMonthsLabel[iterStat.index]) - 1) : ''}">3</span>月
+              </button>
+            </li>
+          </ul>
+      
+          <!-- 実際に送る値 -->
+          <input type="hidden" name="month" id="monthHidden" th:value="${selectedMonth}">
+        </div>
+      </form>
+
+      <!-- ▼ 可変カテゴリ。必要なら .categories-grid で3列レイアウトに -->
+<section class="categories-grid">
+  <!-- categories を回し、各カテゴリのデータを list に束ねる -->
+  <section class="category-box"
+           th:each="c : ${categories}"
+           th:with="list=${byCat[c.id]}">
+    <div class="category-content">
+
+      <!-- タイトル行：DBの category_name を見出しに -->
+      <div class="category-row title-row">
+        <div class="category-title-box">
+          <span class="category-title-text" th:text="${c.categoryName}">カテゴリ</span>
+        </div>
+        <button type="button" class="add-item-btn" disabled>項目を追加する</button>
+      </div>
+
+      <div class="items-panel">
+        <div class="items-controls">
+          <div class="control-box">項目名</div>
+          <div class="control-box">学習時間</div>
+        </div>
+
+        <!-- list が null/空でも枠は出し、行は描画されないだけ -->
+        <div class="items-list">
+          <div class="item-row" th:each="d : ${list}">
+            <!-- 項目名 -->
+            <div class="cell name-cell">
+              <span class="item-text" th:text="${d.item}">-</span>
+            </div>
+
+            <!-- 学習時間 -->
+            <div class="cell time-cell">
+              <div class="learning-time-box">
+                <span class="learning-time-text"
+                      th:text="${d.learningTime} ?: (${d['learning_time']} ?: 0)">0</span>
+                <div class="learning-time-dropdown">
+                  <button type="button" class="time-up" aria-label="増やす"><div class="triangle-up"></div></button>
+                  <button type="button" class="time-down" aria-label="減らす"><div class="triangle-down"></div></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 保存 / 削除 -->
+            <div class="cell save-cell">
+              <button class="btn-save" type="button">学習時間を保存する</button>
+            </div>
+            <div class="cell delete-cell">
+              <button class="btn btn-delete" type="button">削除する</button>
+            </div>
+          </div><!-- /.item-row -->
+        </div><!-- /.items-list -->
+      </div><!-- /.items-panel -->
+
+    </div><!-- /.category-content -->
+  </section><!-- /.category-box -->
+</section><!-- /.categories-grid -->
+      
+
+    </main>
+
+    <!-- フッター -->
+    <footer th:replace="common/footer :: footer"></footer>
+
+  </div>
+
+  <script>
+    (() => {
+      const dd = document.querySelector('.month-dd');
+      if (!dd) return;
+      const toggle = dd.querySelector('.month-toggle');
+      const menu = dd.querySelector('.month-menu');
+      const hidden = document.getElementById('monthHidden');
+      const form = document.getElementById('monthForm');
+    
+      toggle.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!open));
+        menu.hidden = open;
+        if (!open) {
+          const first = menu.querySelector('.month-item');
+          first && first.focus();
+        }
+      });
+    
+      menu.addEventListener('click', (e) => {
+        const btn = e.target.closest('.month-item');
+        if (!btn) return;
+        hidden.value = btn.dataset.value;
+        const num = btn.querySelector('.num')?.textContent || '';
+        toggle.querySelector('.num').textContent = num;
+        menu.hidden = true;
+        toggle.setAttribute('aria-expanded','false');
+        form.submit();
+      });
+    
+      document.addEventListener('click', (e) => {
+        if (!dd.contains(e.target)) {
+          menu.hidden = true;
+          toggle.setAttribute('aria-expanded','false');
+        }
+      });
+    
+      dd.addEventListener('keydown', (e) => {
+        const items = Array.from(menu.querySelectorAll('.month-item'));
+        const idx = items.indexOf(document.activeElement);
+        if (e.key === 'Escape') {
+          menu.hidden = true; toggle.setAttribute('aria-expanded','false'); toggle.focus();
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          const next = items[Math.min(idx + 1, items.length - 1)] || items[0];
+          next.focus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          const prev = items[Math.max(idx - 1, 0)] || items[items.length - 1];
+          prev.focus();
+        } else if (e.key === 'Enter' && document.activeElement.classList.contains('month-item')) {
+          document.activeElement.click();
+        }
+      });
+    })();
+  </script>
+  <script>
+    document.addEventListener('click', function (e) {
+      // 三角（またはその内側）をクリックしたか？
+      const isUp = e.target.closest('.triangle-up');
+      const isDown = e.target.closest('.triangle-down');
+      if (!isUp && !isDown) return;
+  
+      // 対象行のボックスと表示ラベルを取得
+      const box = e.target.closest('.learning-time-box');
+      if (!box) return;
+  
+      const label = box.querySelector('.learning-time-text');
+      if (!label) return;
+  
+      let val = parseInt(label.textContent || '0', 10);
+      if (Number.isNaN(val)) val = 0;
+  
+      if (isUp)   val += 1;
+      if (isDown) val = Math.max(0, val - 1); // 0未満にしない
+  
+      label.textContent = val;
+    });
+  </script>
 </body>
 </html>

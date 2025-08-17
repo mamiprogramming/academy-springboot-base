@@ -699,3 +699,646 @@ button.submit-button:hover {
   display: inline-block;   /* 幅を制御できるように */
   vertical-align: middle;  /* 行内中央揃え */
 }
+
+/* ========== スキル編集ページ ========== */
+
+/* 全体 */
+.learning-chart-wrapper {
+  width: 960px;
+  min-height: 100vh;  /* 画面高ぶんは最低確保。増えたらそのまま伸びる */
+  margin: 0 auto; /* 横中央寄せ */
+  padding-top: 40px;
+  padding-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* ボックス同士の間隔を40pxに */
+  box-sizing: border-box; /* パディング込みでサイズ960×1512に収める */
+}
+
+/* 月選択プルダウン */
+.learning-chart-wrapper form {
+  align-self: flex-start; /* 横方向に左寄せ */
+  width: auto;            /* 必要なら幅調整 */
+  margin-left: 0;         /* 余白リセット */
+}
+
+/* 月選択プルダウン */
+.form-select.month-select{
+  width: 94px !important;
+  height: 44px !important;
+
+  font-family: 'Roboto', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 24px !important;
+  line-height: 44px !important;     /* 縦中央 */
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;/* 半角等幅風でブレなし */
+  text-align: center !important;
+
+  /* 左寄りにする → 左余白を減らす（例: 12px） */
+  padding-left: 0 !important;
+  padding-right: 20px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+
+  box-sizing: border-box !important;
+  border: 1px solid #DDDDDD !important;
+  border-radius: 4px !important;
+  background-color: #fff !important;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  /* 逆三角（12.124×9）を右端に */
+  background:
+    url("data:image/svg+xml,%3Csvg width='12.124' height='9' viewBox='0 0 12.124 9' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0L6.062 9L12.124 0H0Z' fill='%23000000'/%3E%3C/svg%3E")
+    no-repeat right 14px center / 12.124px 9px !important;
+}
+
+/* 開いたメニュー内の各option（3ヶ月分） */
+.form-select.month-select option{
+  /* ここはブラウザ依存だけど、効く範囲で */
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 18px;      /* ←リスト側だけ小さめ */
+  line-height: 44px;    /* 行の高さっぽく見せる（無視されることも） */
+  text-align: center;   /* 文字中央（Safariは効かないことあり） */
+}
+
+/* コンテナ */
+.month-dd {
+  position: relative;
+  display: inline-block;
+}
+
+/* 閉じている時の見た目（94×44, 少し中央寄せ） */
+.month-toggle {
+  width: 94px;
+  height: 44px;
+
+  /* 上右下左 */
+  padding-top: 8px;
+  padding-right: 20px;  /* 三角分の余白 */
+  padding-bottom: 8px;
+  padding-left: 0;   
+
+  box-sizing: border-box;
+
+  border: 1px solid #DDDDDD;
+  border-radius: 4px;
+  background: #FFFFFF;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 中央寄せ */
+  gap: 4px;
+
+  position: relative;
+  cursor: pointer;
+}
+
+/* 逆三角（12.124×9）中央寄せ気味に */
+.month-toggle::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 18px; /* 少し左へ寄せる */
+  transform: translateY(-50%);
+
+  width: 12.124px;
+  height: 9px;
+
+  background: url("data:image/svg+xml,%3Csvg width='12.124' height='9' viewBox='0 0 12.124 9' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0L6.062 9L12.124 0H0Z' fill='%23000000'/%3E%3C/svg%3E")
+              no-repeat center / contain;
+}
+
+/* 数字 */
+.month-toggle .num {
+  font-size: 24px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 開いたリスト（3ヶ月分） */
+.month-menu {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 4px);
+  width: 94px;                 /* ボタンと同幅に */
+  margin: 0;
+  padding: 8px 0;              /* 上下8px、左右は各行で */
+  list-style: none;            /* ドット消す */
+
+  background: #FFFFFF;
+  border: 1px solid #DDDDDD;
+  border-radius: 8px;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  opacity: 1;
+  z-index: 100;
+  overflow: hidden;
+}
+
+/* 各行（数字と「月」を中央寄せ、逆三角なし） */
+.month-item {
+  width: 100%;
+  height: 44px;
+
+  padding-top: 8px;
+  padding-right: 20px;
+  padding-bottom: 8px;
+  padding-left: 0;
+
+  box-sizing: border-box;
+  background: #FFFFFF;
+  border: 0;
+  cursor: pointer;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 数字＋月を中央寄せ */
+  gap: 4px;
+}
+
+/* ドロップダウンを開いている間、ボタンをグレーに */
+.month-toggle[aria-expanded="true"] {
+  background: #DDDDDD;
+  border-color: #DDDDDD; /* 枠も揃えたい場合（任意） */
+}
+
+.month-item[aria-selected="true"] {
+  background: #F5F5F5;
+}
+
+.month-item:hover {
+  background: #F0F0F0;
+}
+
+/* キーボード操作フォーカス見やすく */
+.month-item:focus{ outline:2px solid #7aa7ff; outline-offset:-2px; }
+
+/* 選択中の行でも白にする（= 一番上が選択月でグレーにならない） */
+.month-item[aria-selected="true"] {
+  background: #FFFFFF !important;
+}
+/* ただしホバー時は従来どおり薄グレーにしたいなら */
+.month-item[aria-selected="true"]:hover {
+  background: #F0F0F0 !important;
+}
+
+
+/* カテゴリー外枠 */
+.category-box {
+  width: 960px;
+  height: 436px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  padding: 40px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* 中身の領域 */
+.category-content {
+  width: 880px;
+  height: 356px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  box-sizing: border-box;
+}
+
+/* タイトルと項目ボタン一行ボックス（幅880 × 高さ48） */
+.category-row.title-row {
+  width: 880px;
+  height: 48px; /* タイトル行全体の高さ */
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* 上寄せ */
+  box-sizing: border-box;
+  opacity: 1;
+}
+
+/* タイトルの外箱（幅・高さを管理） */
+.category-title-box {
+  width: 240px;
+  height: 44px;
+  display: flex;
+  align-items: flex-start; /* 上寄せ */
+  justify-content: flex-start;
+  box-sizing: border-box;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+}
+
+/* タイトル文字の内箱（文字の行間や色を管理） */
+.category-title-text {
+  display: block;
+  margin: 0;
+  padding: 0;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 24px; /* フォントサイズと同じにして上下余白を消す */
+  letter-spacing: 0;
+  color: #000000BF;
+}
+
+/* 項目を追加するボタン */
+.add-item-btn {
+  width: 178px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 16px 40px; /* 上下16px、左右40px */
+
+  border: none;
+  border-radius: 4px;
+  background-color: #1B5678;
+  color: #FFFFFF;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap; /* 文字を折り返さない */
+
+
+  cursor: pointer;
+  opacity: 1;
+}
+
+/* 項目 */
+.category-row table.table-borderless {
+  width: 880px;
+  height: 276px;
+  border-radius: 4px;
+  /* 影を3種類重ねる */
+  box-shadow:
+    0px 1px 5px 0px #0000001F,
+    0px 2px 2px 0px #00000024,
+    0px 3px 1px -2px #00000033;
+  opacity: 1;
+  border-collapse: separate; /* 角丸有効化のため */
+  overflow: hidden; /* 角丸部分で中の内容がはみ出さないように */
+}
+
+/* テーブルが下にぴったり付くように */
+.category-row:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* 入力フィールドのラッパ（数値＋単位を横並び中央寄せ） */
+.minutes-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+}
+
+/* 数値入力本体：小さめ、角丸 */
+.minutes-input {
+  width: 96px;
+  height: 32px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+/* 単位表示 */
+.minutes-unit {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1;
+  color: rgba(0,0,0,0.75);
+}
+
+/* disabled統一感 */
+.minutes-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.minutes-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* 項目名学習時間外枠 */
+.items-controls {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+}
+
+/* 項目名学習時間内枠 */
+.control-box {
+  width: 240px;
+  height: 56px;
+  box-sizing: border-box;
+  padding-top: 16px;
+  padding-right: 16px;
+  padding-bottom: 16px;
+  padding-left: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0.15px;
+  vertical-align: middle;
+  color: #000000DE;
+}
+
+/* 2列目（学習時間）だけ左パディングを16pxにして揃える */
+.items-controls .control-box:nth-child(2) {
+  padding-left: 16px;
+}
+
+/* 項目パネル（影・角丸・下にぴったり） */
+.items-panel {
+  width: 880px;
+  height: 276px;
+  border-radius: 4px;
+  box-shadow: 0px 1px 5px 0px #0000001F, 0px 2px 2px 0px #00000024, 0px 3px 1px -2px #00000033;
+  background: #FFFFFF;
+  overflow: hidden;
+}
+
+/* 項目リスト全体 */
+.items-list {
+  width: 880px;
+  max-height: calc(73px * 3); /* 3件分の高さ */
+  overflow-y: auto; /* 3件超えたらスクロール */
+  background: #FFFFFF;
+  box-sizing: border-box;
+}
+
+/* 各行（1アイテム分） */
+.item-row {
+  width: 880px;
+  height: 73px;
+  display: flex;
+  background: #FFFFFF;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(0, 0, 0, 0.1); /* 上だけ線 */
+}
+
+/* 項目名表示ボックス */
+.cell.name-cell {
+  width: 240px;
+  height: 72px;
+  padding: 0 16px 0 40px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+}
+
+/* 項目名テキストの表示領域（name-cell 内の枠） */
+.item-text {
+  width: 184px;
+  height: 20px;
+  display: block;
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.43;        /* 143% */
+  letter-spacing: 0.15px;
+  color: #000000DE;          /* テキスト色 */
+}
+
+/* 学習時間表示ボックス */
+.cell.time-cell {
+  width: 240px;
+  height: 72px;
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+}
+
+/* 学習時間の外枠 */
+.learning-time-box {
+  width: 160px;
+  height: 40px;
+  border-radius: 4px;
+  border: 1px solid #0000003B;
+  background: #FFFFFF;
+  box-sizing: border-box;
+  padding: 0 8px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 3px;
+}
+
+/* 数値表示 */
+.learning-time-text {
+  position: absolute;
+  width: 16px;
+  height: 19px;
+  top: 10.5px;
+  left: 12px;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  letter-spacing: 0.15px;
+  color: #0000008A;
+}
+
+/* プルダウン風ボタン */
+.learning-time-dropdown {
+  width: 24px;
+  height: 34px;
+  position: absolute;
+  top: 3px;
+  left: 136px;
+  --tri-gap: 6px;
+  z-index: 1; /* クリック当たり判定の保険 */
+}
+
+/* 上三角 */
+.learning-time-dropdown .triangle-up {
+  position: absolute;
+  left: 7px;
+  top: calc((34px - (10px + var(--tri-gap))) / 2);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #0000008A;
+  cursor: pointer; /* クリック当たり判定の保険 */
+}
+
+/* 下三角 */
+.learning-time-dropdown .triangle-down {
+  position: absolute;
+  left: 7px;
+  top: calc((34px - (10px + var(--tri-gap))) / 2 + 5px + var(--tri-gap));
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #0000008A;
+  cursor: pointer; /* クリック当たり判定の保険 */
+}
+
+/* 三角ボタン */
+.learning-time-dropdown button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: 24px;
+  height: 12px;
+}
+
+.learning-time-dropdown .triangle-down {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+}
+
+.learning-time-dropdown .triangle-up {
+  border-bottom: 5px solid #0000008A;
+}
+
+.learning-time-dropdown .triangle-down {
+  border-top: 5px solid #0000008A;
+}
+
+/* 「学習時間を保存する」ボタンの外範囲 */
+.cell.save-cell {
+  width: 200px;
+  height: 72px;
+  padding: 16px;
+  background: #FFFFFF;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center; /* ボタンを中央配置 */
+}
+
+/* 「学習時間を保存する」ボタン */
+.btn-save {
+  width: 158px;
+  height: 32px;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid #1B5678; /* ネイビー線 */
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+
+  background: #FFFFFF;      /* 白背景 */
+  color: #1B5678;           /* ネイビー文字 */
+  cursor: pointer;
+}
+
+/* 削除ボタン領域 */
+.cell.delete-cell {
+  width: 200px;
+  height: 72px;
+  padding: 16px 40px 16px 16px; /* 上 右 下 左 */
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* ★右寄せにする */
+  background: #FFFFFF;
+}
+
+/* 削除ボタン */
+.btn-delete {
+  width: 88px;
+  height: 32px;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: none;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+
+  background: #EE6969;  /* 赤背景 */
+  color: #FFFFFF;       /* 白文字 */
+  cursor: pointer;
+}
+
+/* 親は縦積み。gapは無効化して“marginで40px”を作る */
+.categories-grid{
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 0 !important;
+  row-gap: 0 !important;
+  grid-template-columns: none !important;
+}
+
+/* 各カテゴリー枠：重なり防止＋上下余白40pxを明示 */
+.category-box{
+  position: static !important;
+  transform: none !important;
+  margin: 0 0 40px 0 !important;   /* ← これで常に40px */
+}
+
+/* 固定 276px をやめて、内容に合わせて伸縮させる */
+.items-panel{
+  height: auto !important;  /* ★ここがポイント */
+}
+
+/* リストは「最大 3 行ぶん」まで。超えたらスクロール */
+.items-list{
+  max-height: calc(73px * 3) !important; /* 行高 73px × 3 */
+  overflow-y: auto !important;
+}
