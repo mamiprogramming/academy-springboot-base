@@ -886,22 +886,15 @@ button.submit-button:hover {
 /* キーボード操作フォーカス見やすく */
 .month-item:focus{ outline:2px solid #7aa7ff; outline-offset:-2px; }
 
-/* カテゴリー外枠
-.category-box {
-  width: 960px;
-  height: 436px;
-  border: 1px solid #00000080;
-  border-radius: 8px;
-  padding: 40px;
-  box-sizing: border-box;
+/* 選択中の行でも白にする（= 一番上が選択月でグレーにならない） */
+.month-item[aria-selected="true"] {
+  background: #FFFFFF !important;
+}
+/* ただしホバー時は従来どおり薄グレーにしたいなら */
+.month-item[aria-selected="true"]:hover {
+  background: #F0F0F0 !important;
+}
 
-  display: flex;
-  flex-direction: column;
-  gap: 80px;
-
-  opacity: 1;
-} 
-*/
 
 /* カテゴリー外枠 */
 .category-box {
