@@ -27,7 +27,7 @@
     <main class="learning-chart-wrapper">
 
       <!-- 月選択プルダウン -->
-      <form method="get" action="/chart" class="month-select-form" id="monthForm">
+      <form method="get" action="/skill/edit" class="month-select-form" id="monthForm">
         <div class="month-dd">
           <!-- 表示中（月のボタン） -->
           <button type="button" class="month-toggle" aria-haspopup="listbox" aria-expanded="false" id="monthToggle">
@@ -53,99 +53,63 @@
         </div>
       </form>
 
-<!-- バックエンド -->
-<section class="category-box">
-  <div class="category-content">
+      <!-- ▼ 可変カテゴリ。必要なら .categories-grid で3列レイアウトに -->
+<section class="categories-grid">
+  <!-- categories を回し、各カテゴリのデータを list に束ねる -->
+  <section class="category-box"
+           th:each="c : ${categories}"
+           th:with="list=${byCat[c.id]}">
+    <div class="category-content">
 
-    <!-- タイトル＋ボタン行（.category-content の子） -->
-    <div class="category-row title-row">
-      <div class="category-title-box">
-        <span class="category-title-text">バックエンド</span>
-      </div>
-      <button type="button" class="add-item-btn" disabled>項目を追加する</button>
-    </div>
-
-    <!-- 項目エリア（.category-content の中に収める） -->
-    <div class="items-panel">
-      <!-- 左に2つ並ぶラベル -->
-      <div class="items-controls">
-        <div class="control-box">項目名</div>
-        <div class="control-box">学習時間</div>
+      <!-- タイトル行：DBの category_name を見出しに -->
+      <div class="category-row title-row">
+        <div class="category-title-box">
+          <span class="category-title-text" th:text="${c.categoryName}">カテゴリ</span>
+        </div>
+        <button type="button" class="add-item-btn" disabled>項目を追加する</button>
       </div>
 
-      <!-- ここだけ縦スクロール。3件分の高さ固定 -->
-      <div class="items-list">
-        <div class="item-row" th:each="d : ${learningDataList}">
-          <div class="cell name-cell">
-            <span class="item-text" th:text="${d.item}">Ruby</span>
-          </div>
+      <div class="items-panel">
+        <div class="items-controls">
+          <div class="control-box">項目名</div>
+          <div class="control-box">学習時間</div>
+        </div>
 
-          <div class="cell time-cell">
-            <div class="learning-time-box">
-              <span class="learning-time-text"
-                    th:text="${d.learningTime != null ? d.learningTime : d.learning_time}">0</span>
-              <div class="learning-time-dropdown">
-                <button type="button" class="time-up" aria-label="増やす"><div class="triangle-up"></div></button>
-                <button type="button" class="time-down" aria-label="減らす"><div class="triangle-down"></div></button>
+        <!-- list が null/空でも枠は出し、行は描画されないだけ -->
+        <div class="items-list">
+          <div class="item-row" th:each="d : ${list}">
+            <!-- 項目名 -->
+            <div class="cell name-cell">
+              <span class="item-text" th:text="${d.item}">-</span>
+            </div>
+
+            <!-- 学習時間 -->
+            <div class="cell time-cell">
+              <div class="learning-time-box">
+                <span class="learning-time-text"
+                      th:text="${d.learningTime} ?: (${d['learning_time']} ?: 0)">0</span>
+                <div class="learning-time-dropdown">
+                  <button type="button" class="time-up" aria-label="増やす"><div class="triangle-up"></div></button>
+                  <button type="button" class="time-down" aria-label="減らす"><div class="triangle-down"></div></button>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="cell save-cell">
-            <button class="btn-save" type="button">学習時間を保存する</button>
-          </div>
-          <div class="cell delete-cell">
-            <button class="btn btn-delete" type="button">削除する</button>
-          </div>
-        </div>
-      </div>
-</section>
+            <!-- 保存 / 削除 -->
+            <div class="cell save-cell">
+              <button class="btn-save" type="button">学習時間を保存する</button>
+            </div>
+            <div class="cell delete-cell">
+              <button class="btn btn-delete" type="button">削除する</button>
+            </div>
+          </div><!-- /.item-row -->
+        </div><!-- /.items-list -->
+      </div><!-- /.items-panel -->
 
-      <!-- フロントエンド -->
-      <section class="category-box">
-        <div class="category-title-wrapper">
-          <h2 class="category-title">フロントエンド</h2>
-          <button type="button" class="btn btn-secondary btn-sm" disabled>項目を追加する</button>
-        </div>
-        <div class="category-content">
-          <table class="table table-borderless">
-            <thead>
-              <tr>
-                <th>項目名</th>
-                <th>学習時間</th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- 学習データ行 -->
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- インフラ -->
-      <section class="category-box">
-        <div class="category-title-wrapper">
-          <h2 class="category-title">インフラ</h2>
-          <button type="button" class="btn btn-secondary btn-sm" disabled>項目を追加する</button>
-        </div>
-        <div class="category-content">
-          <table class="table table-borderless">
-            <thead>
-              <tr>
-                <th>項目名</th>
-                <th>学習時間</th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- 学習データ行 -->
-            </tbody>
-          </table>
-        </div>
-      </section>
+    </div><!-- /.category-content -->
+  </section><!-- /.category-box -->
+</section><!-- /.categories-grid -->
+      
 
     </main>
 
@@ -209,6 +173,29 @@
         }
       });
     })();
+  </script>
+  <script>
+    document.addEventListener('click', function (e) {
+      // 三角（またはその内側）をクリックしたか？
+      const isUp = e.target.closest('.triangle-up');
+      const isDown = e.target.closest('.triangle-down');
+      if (!isUp && !isDown) return;
+  
+      // 対象行のボックスと表示ラベルを取得
+      const box = e.target.closest('.learning-time-box');
+      if (!box) return;
+  
+      const label = box.querySelector('.learning-time-text');
+      if (!label) return;
+  
+      let val = parseInt(label.textContent || '0', 10);
+      if (Number.isNaN(val)) val = 0;
+  
+      if (isUp)   val += 1;
+      if (isDown) val = Math.max(0, val - 1); // 0未満にしない
+  
+      label.textContent = val;
+    });
   </script>
 </body>
 </html>
