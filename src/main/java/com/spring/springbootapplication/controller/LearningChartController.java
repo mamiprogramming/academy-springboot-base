@@ -85,6 +85,7 @@ public class LearningChartController {
         model.addAttribute("selectedMonthNumber", selectedMonthNumber);
         model.addAttribute("availableMonths", availableMonths);
         model.addAttribute("availableMonthsLabel", availableMonthsLabel);
+        model.addAttribute("isLoginPage", false);
 
         return "skill_edit";
     }

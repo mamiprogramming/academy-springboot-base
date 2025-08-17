@@ -705,7 +705,7 @@ button.submit-button:hover {
 /* 全体 */
 .learning-chart-wrapper {
   width: 960px;
-  height: 1512px;
+  min-height: 100vh;  /* 画面高ぶんは最低確保。増えたらそのまま伸びる */
   margin: 0 auto; /* 横中央寄せ */
   padding-top: 40px;
   padding-bottom: 40px;
@@ -1315,12 +1315,30 @@ button.submit-button:hover {
   cursor: pointer;
 }
 
-/* 3列レイアウトのCSS */
+/* 親は縦積み。gapは無効化して“marginで40px”を作る */
 .categories-grid{
-  display:grid;
-  grid-template-columns:repeat(3, minmax(0,1fr));
-  gap:16px;
-  align-items:start;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 0 !important;
+  row-gap: 0 !important;
+  grid-template-columns: none !important;
 }
-@media (max-width:1080px){ .categories-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
-@media (max-width:720px){ .categories-grid{ grid-template-columns:minmax(0,1fr); } }
+
+/* 各カテゴリー枠：重なり防止＋上下余白40pxを明示 */
+.category-box{
+  position: static !important;
+  transform: none !important;
+  margin: 0 0 40px 0 !important;   /* ← これで常に40px */
+}
+
+/* 固定 276px をやめて、内容に合わせて伸縮させる */
+.items-panel{
+  height: auto !important;  /* ★ここがポイント */
+}
+
+/* リストは「最大 3 行ぶん」まで。超えたらスクロール */
+.items-list{
+  max-height: calc(73px * 3) !important; /* 行高 73px × 3 */
+  overflow-y: auto !important;
+}
