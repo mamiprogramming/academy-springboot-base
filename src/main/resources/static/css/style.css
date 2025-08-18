@@ -1337,7 +1337,7 @@ button.submit-button:hover {
   height: auto !important;  /* ★ここがポイント */
 }
 
-/* リストは「最大 3 行ぶん」まで。超えたらスクロール */
+/* リストは「最大 3 行分」まで。超えたらスクロール */
 .items-list{
   max-height: calc(73px * 3) !important; /* 行高 73px × 3 */
   overflow-y: auto !important;
