@@ -976,9 +976,38 @@ button.submit-button:hover {
   line-height: 1;
   white-space: nowrap; /* 文字を折り返さない */
 
-
+  text-decoration: none;        /* 下線を消す */
   cursor: pointer;
   opacity: 1;
+
+  /* 余計な色変化を防ぐ */
+  transition: none;
+  -webkit-tap-highlight-color: transparent; /* モバイルの青ハイライト抑制 */
+}
+
+/* ホバー/フォーカス/アクティブ/訪問済みでも見た目固定 */
+.add-item-btn:hover,
+.add-item-btn:focus,
+.add-item-btn:active,
+.add-item-btn:visited {
+  background: #1B5678;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: none;
+  outline: none;
+}
+
+/* キーボード操作の視認性だけ確保（色は変えない） */
+.add-item-btn:focus-visible {
+  outline: 2px solid #09415c;
+  outline-offset: 2px;
+}
+
+/* 無効にしたいとき（aにdisabledは効かない） */
+.add-item-btn.is-disabled,
+.add-item-btn[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 /* 項目 */
@@ -1342,3 +1371,192 @@ button.submit-button:hover {
   max-height: calc(73px * 3) !important; /* 行高 73px × 3 */
   overflow-y: auto !important;
 }
+
+
+/* ========== スキル項目追加ページ ========== */
+
+/* 見出し */
+.skillnew-heading-box{
+  width: fit-content;          /* 文字幅に合わせて伸びる */
+  margin: 39px auto 0;         /* 中央寄せ */
+}
+.skillnew-heading{
+  font-family: "Roboto", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 1.33;
+  color: rgba(0,0,0,.75);
+  margin: 0;
+  white-space: nowrap;         /* 折り返さない */
+  display: inline-block;
+}
+
+/* 入力ブロック全体（上=項目名／中=学習時間／下=ボタン） */
+.skillnew-form-box{
+  width: 480px;
+  height: 268px;
+  margin: 79px auto 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;   
+}
+
+/* ラベル＋下線付き入力を48pxに収める（12 + 3 + 33） */
+.skillnew-field{
+  width: 480px;
+  height: 48px;
+  display: grid;
+  grid-template-rows: 12px 33px auto;
+  row-gap: 3px;
+}
+.skillnew-field .form-label{
+  margin: 0 !important;
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: .15px;
+  color: rgba(0,0,0,.54);
+}
+
+/* 入力（フォント指定のみ修正。他数値はそのまま） */
+.skillnew-field .form-control{
+  /* ▼ フォントまわり（ご指定どおり） */
+  font-family: "Roboto", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;              /* ここだけ数値変更 */
+  letter-spacing: 0.15px;
+  color: rgba(0,0,0,.87);         /* #000000DE 相当 */
+  vertical-align: middle;
+
+  /* ▼ 既存レイアウト数値は変更しない */
+  box-sizing: border-box;
+  height: 33px !important;      /* 48 - 12 - 3 */
+  padding: 0 !important;
+  margin: 0 !important;
+
+  border: none !important;      /* 全ボーダー無効化 */
+  border-bottom: 1px solid rgba(0,0,0,.42) !important;  /* 下線(0.42) */
+  border-radius: 0 !important;
+  background: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.skillnew-field + .skillnew-field{
+  margin-top: 48px;               /* ← 好みで調整可。ヘルプには影響しない */
+}
+
+/* ヘルプ文（学習時間の下） */
+.skillnew-help{
+  width: 480px;
+  margin-top: 8px;                /* 通常は余白あり */
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(0,0,0,.54);
+}
+.skillnew-field--time + .skillnew-help{
+  margin-top: 4px;                /* 学習時間の下線にピタ寄せ */
+}
+
+/* 既定スピナーを消す */
+.skillnew-field input[type="number"]::-webkit-outer-spin-button,
+.skillnew-field input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.skillnew-field input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+
+/* 入力右側にカスタムスピナー分の余白を確保（24px + α） */
+.skillnew-numwrap .form-control{
+  padding-right: 28px !important;
+}
+
+/* スピナー用ラッパ：入力(33px)の上に重ねる */
+.skillnew-numwrap{
+  position: relative;
+  height: 33px;                 /* 入力と同じ高さ */
+}
+.skillnew-spin{
+  position: absolute;
+  top: 0;                       /* 入力の上端に合わせる */
+  right: 0;
+  width: 24px;                  /* ご指定の 24 */
+  height: 33px;                 /* ご指定に合わせた 33 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;         /* 三角自体は透過／ボタンで受ける */
+}
+
+/* クリック領域（上下） */
+.spin-btn{
+  position: relative;
+  width: 24px;
+  height: 16.5px;               /* 33を上下2分割 */
+  background: transparent;
+  border: none;
+  padding: 0;
+  pointer-events: auto;         /* クリックを受ける */
+  cursor: pointer;
+}
+
+/* 三角（10×5、上: top=8px / left=7px、色 #0000008A） */
+.spin-up::before,
+.spin-down::before{
+  content:"";
+  position: absolute;
+  left: 7px;                    /* 指定どおり */
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+}
+
+/* 上向き（top 8 / 高さ5） */
+.spin-up::before{
+  top: 8px;                     /* 指定どおり */
+  border-bottom: 5px solid rgba(0,0,0,0.54); /* #0000008A */
+}
+
+/* 下向き（三角を逆向きに、間隔は既存数値のまま） */
+.spin-down::before{
+  bottom: 9px;                  /* 指定どおり */
+  border-top: 5px solid rgba(0,0,0,0.54);
+}
+
+/* ホバー時の軽いフィードバック（任意） */
+.spin-btn:hover::before{ filter: brightness(0.5); }
+
+/* 送信ボタン */
+.skillnew-actions{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+}
+.skillnew-submit{
+  box-sizing: border-box;
+  width: 232px;
+  height: 53px;
+
+  /* 中央寄せ（見た目のみ。不変の数値は変更しない） */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 80px;
+  border-radius: 4px;
+  background: #1B5678;
+  color: #FFFFFF;
+  border: none;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+.skillnew-submit:hover{ filter: brightness(1.05); }
+.skillnew-submit:focus{ outline: none; box-shadow: none; }
+
+/* エラー表示（共通） */
+.skillnew-error{
+  width: 480px;
+  font-size: 12px;
+  line-height: 1.3;
+  color: #dc3545;
+  margin-top: 4px;                   /* 下線/ヘルプの直下に少しだけ余白 */
+}
+
