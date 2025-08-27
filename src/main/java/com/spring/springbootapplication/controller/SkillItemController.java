@@ -87,6 +87,8 @@ public class SkillItemController {
         ra.addFlashAttribute("saved", true);
         ra.addFlashAttribute("month", form.getLearningMonth());
         ra.addFlashAttribute("categoryId", form.getCategoryId());
+        ra.addFlashAttribute("savedItem", form.getItem());
+        ra.addFlashAttribute("savedTime", form.getLearningTime());
 
         // 同じ /skill/new にリダイレクトしてモーダルを出す
         return "redirect:/skill/new?month=" + form.getLearningMonth()

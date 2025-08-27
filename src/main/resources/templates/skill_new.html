@@ -22,7 +22,7 @@
 <!-- 共通ヘッダー -->
 <div th:replace="~{common/header :: header}"></div>
 
-<main class="container">
+<main class="container px-0">
   <div class="skillnew-heading-box">
     <h1 class="skillnew-heading"
         th:text="|${categoryName} に項目を追加|">カテゴリー名 に項目を追加</h1>
@@ -66,20 +66,28 @@
   </form>
 </main>
 
-<!-- 完了モーダル -->
-<div class="modal fade" id="saveDoneModal" tabindex="-1" aria-hidden="true"
-     th:classappend="${saved} ? ' show' : ''" th:attr="style=${saved} ? 'display:block;' : 'display:none;'">
-  <div class="modal-dialog">
+<!-- 登録完了モーダル -->
+<div class="modal fade modal-success" id="saveDoneModal" tabindex="-1" aria-hidden="true"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
-        <h2 class="modal-title fs-5">登録が完了しました</h2>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+      <div class="modal-body text-center">
+        <p class="modal-success__msg">
+          <span class="msg-row">
+            <span class="msg-strong" th:text="${categoryName}">カテゴリー名</span>
+            に
+            <span class="msg-strong" th:text="${savedItem}">項目名</span>
+            を
+          </span>
+          <span class="msg-row">
+            <span class="msg-strong" th:text="${savedTime}">60</span>分で追加しました！
+          </span>
+        </p>
       </div>
-      <div class="modal-body">
-        選択月（<span th:text="${month}">YYYY-MM</span>）として保存しました。
-      </div>
-      <div class="modal-footer">
-        <a class="btn btn-primary" th:href="@{/skill/edit(month=${month})}">編集ページに戻る</a>
+      <div class="modal-footer justify-content-center">
+        <a class="modal-success__btn" th:href="@{/skill/edit(month=${month})}">
+          編集ページに戻る
+        </a>
       </div>
     </div>
   </div>
@@ -88,12 +96,7 @@
 <!-- 共通フッター -->
 <div th:replace="~{common/footer :: footer}"></div>
 
-<script th:inline="javascript">
-  document.addEventListener('DOMContentLoaded', function () {
-    /*[[${saved}]]*/ false && new bootstrap.Modal(document.getElementById('saveDoneModal')).show();
-  });
-</script>
-<script>
+  <script>
   document.addEventListener('click', function(e){
     if(!e.target.classList.contains('spin-btn')) return;
     const wrap = e.target.closest('.skillnew-numwrap');
@@ -114,6 +117,19 @@
     // 入力イベントを発火（バリデーション反映など）
     input.dispatchEvent(new Event('input', { bubbles: true }));
   });
+  </script>
+
+  <script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+      const saved = /*[[${saved}]]*/ false;   // ← saved が true のときだけ実行
+      if (saved) {
+        const m = new bootstrap.Modal(document.getElementById('saveDoneModal'), {
+          backdrop: true,   // data属性と合わせておけばOK
+          keyboard: false
+        });
+        m.show();
+      }
+    });
   </script>
 </body>
 </html>
