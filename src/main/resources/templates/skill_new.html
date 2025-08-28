@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>項目を追加</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous" />
+
+  <!-- 共通CSS -->
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+          crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- 共通ヘッダー -->
+<div th:replace="~{common/header :: header}"></div>
+
+<main class="container px-0">
+  <div class="skillnew-heading-box">
+    <h1 class="skillnew-heading"
+        th:text="|${categoryName} に項目を追加|">カテゴリー名 に項目を追加</h1>
+  </div>
+
+  <form th:action="@{/skill/new}" th:object="${form}" method="post" novalidate>
+    <input type="hidden" th:field="*{learningMonth}">
+    <input type="hidden" th:field="*{categoryId}">
+  
+    <div class="skillnew-form-box">
+      <div class="skillnew-field">
+        <label class="form-label" th:for="*{item}">項目名</label>
+        <input type="text" th:field="*{item}" class="form-control">
+        <div class="skillnew-error"
+             th:if="${#fields.hasErrors('item')}"
+             th:errors="*{item}"></div>
+      </div>
+  
+      <div class="skillnew-field skillnew-field--time">
+        <label class="form-label" th:for="*{learningTime}">学習時間</label>
+
+        <!-- ▼ ラッパで右側にカスタムスピナーを重ねる -->
+        <div class="skillnew-numwrap">
+          <input type="number" class="form-control"
+                th:field="*{learningTime}" min="0" step="1" autocomplete="off">
+          <div class="skillnew-spin" aria-hidden="true">
+            <button type="button" class="spin-btn spin-up"  aria-label="増やす"></button>
+            <button type="button" class="spin-btn spin-down" aria-label="減らす"></button>
+          </div>
+        </div>
+      </div>
+      <div class="skillnew-help">分単位で入力してください</div>
+      <div class="skillnew-error"
+           th:if="${#fields.hasErrors('learningTime')}"
+           th:errors="*{learningTime}"></div>
+  
+      <div class="skillnew-actions">
+        <button type="submit" class="skillnew-submit">追加する</button>
+      </div>
+    </div>
+  </form>
+</main>
+
+<!-- 登録完了モーダル -->
+<div class="modal fade modal-success" id="saveDoneModal" tabindex="-1" aria-hidden="true"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <p class="modal-success__msg">
+          <span class="msg-row">
+            <span class="msg-strong" th:text="${categoryName}">カテゴリー名</span>
+            に
+            <span class="msg-strong" th:text="${savedItem}">項目名</span>
+            を
+          </span>
+          <span class="msg-row">
+            <span class="msg-strong" th:text="${savedTime}">60</span>分で追加しました！
+          </span>
+        </p>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <a class="modal-success__btn" th:href="@{/skill/edit(month=${month})}">
+          編集ページに戻る
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 共通フッター -->
+<div th:replace="~{common/footer :: footer}"></div>
+
+  <script>
+  document.addEventListener('click', function(e){
+    if(!e.target.classList.contains('spin-btn')) return;
+    const wrap = e.target.closest('.skillnew-numwrap');
+    if(!wrap) return;
+    const input = wrap.querySelector('input[type="number"]');
+    if(!input) return;
+  
+    const step = Number(input.step) || 1;
+    const min  = (input.min !== "") ? Number(input.min) : -Infinity;
+    const val  = (input.value === "") ? 0 : Number(input.value);
+  
+    if(e.target.classList.contains('spin-up')){
+      input.value = val + step;
+    }else{
+      const next = val - step;
+      input.value = Math.max(next, min);
+    }
+    // 入力イベントを発火（バリデーション反映など）
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+  </script>
+
+  <script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+      const saved = /*[[${saved}]]*/ false;   // ← saved が true のときだけ実行
+      if (saved) {
+        const m = new bootstrap.Modal(document.getElementById('saveDoneModal'), {
+          backdrop: true,   // data属性と合わせておけばOK
+          keyboard: false
+        });
+        m.show();
+      }
+    });
+  </script>
+</body>
+</html>

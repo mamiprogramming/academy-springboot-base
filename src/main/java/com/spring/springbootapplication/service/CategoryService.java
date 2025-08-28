@@ -18,4 +18,13 @@ public class CategoryService {
     public List<Category> findAllOrderById() {
         return categoryMapper.findAllOrderById();
     }
+
+      // ★ idからカテゴリ名を取得（int/Integerどちらでも呼べる）
+    public String getNameById(int id) {
+        Category c = categoryMapper.findById(id);
+        return (c != null && c.getCategoryName() != null) ? c.getCategoryName() : "";
+    }
+    public String getNameById(Integer id) {
+        return (id == null) ? "" : getNameById(id.intValue());
+    }
 }

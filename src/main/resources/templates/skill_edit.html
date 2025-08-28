@@ -54,11 +54,12 @@
       </form>
 
       <!-- ▼ 可変カテゴリ。必要なら .categories-grid で3列レイアウトに -->
-<section class="categories-grid">
-  <!-- categories を回し、各カテゴリのデータを list に束ねる -->
-  <section class="category-box"
-           th:each="c : ${categories}"
-           th:with="list=${byCat[c.id]}">
+      <section class="categories-grid">
+        <!-- categories を回し、各カテゴリのデータを list に束ねる -->
+        <section class="category-box"
+                 th:each="c : ${categories}"
+                 th:with="list=${byCat[c.id]}">
+
     <div class="category-content">
 
       <!-- タイトル行：DBの category_name を見出しに -->
@@ -66,7 +67,12 @@
         <div class="category-title-box">
           <span class="category-title-text" th:text="${c.categoryName}">カテゴリ</span>
         </div>
-        <button type="button" class="add-item-btn" disabled>項目を追加する</button>
+        <th:block th:with="m=${selectedMonth != null ? selectedMonth : (param.month != null ? param.month[0] : null)}">
+          <a class="add-item-btn"
+             th:href="@{/skill/new(month=${m}, categoryId=${c.id})}">
+            項目を追加する
+          </a>
+        </th:block>
       </div>
 
       <div class="items-panel">
