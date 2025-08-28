@@ -123,10 +123,7 @@
     document.addEventListener('DOMContentLoaded', function () {
       const saved = /*[[${saved}]]*/ false;   // ← saved が true のときだけ実行
       if (saved) {
-        const m = new bootstrap.Modal(document.getElementById('saveDoneModal'), {
-          backdrop: true,   // data属性と合わせておけばOK
-          keyboard: false
-        });
+        const m = new bootstrap.Modal(document.getElementById('saveDoneModal'));
         m.show();
       }
     });
