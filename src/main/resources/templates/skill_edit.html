@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
 <head>
   <meta charset="UTF-8" />
   <title>スキル編集</title>
@@ -34,7 +34,7 @@
             <span class="num"
                   th:text="${selectedMonthLabel != null ? #strings.substring(selectedMonthLabel, 0, #strings.length(selectedMonthLabel) - 1) : ''}">3</span>月
           </button>
-          
+
           <ul class="month-menu" role="listbox" aria-labelledby="monthToggle" hidden>
             <li th:each="m, iterStat : ${availableMonths}">
               <button type="button"
@@ -47,7 +47,7 @@
               </button>
             </li>
           </ul>
-      
+
           <!-- 実際に送る値 -->
           <input type="hidden" name="month" id="monthHidden" th:value="${selectedMonth}">
         </div>
@@ -60,79 +60,110 @@
                  th:each="c : ${categories}"
                  th:with="list=${byCat[c.id]}">
 
-    <div class="category-content">
+          <div class="category-content">
 
-      <!-- タイトル行：DBの category_name を見出しに -->
-      <div class="category-row title-row">
-        <div class="category-title-box">
-          <span class="category-title-text" th:text="${c.categoryName}">カテゴリ</span>
-        </div>
-        <th:block th:with="m=${selectedMonth != null ? selectedMonth : (param.month != null ? param.month[0] : null)}">
-          <a class="add-item-btn"
-             th:href="@{/skill/new(month=${m}, categoryId=${c.id})}">
-            項目を追加する
-          </a>
-        </th:block>
-      </div>
-
-      <div class="items-panel">
-        <div class="items-controls">
-          <div class="control-box">項目名</div>
-          <div class="control-box">学習時間</div>
-        </div>
-
-        <!-- list が null/空でも枠は出し、行は描画されないだけ -->
-        <div class="items-list">
-          <div class="item-row" th:each="d : ${list}">
-            <!-- 項目名 -->
-            <div class="cell name-cell">
-              <span class="item-text" th:text="${d.item}">-</span>
-            </div>
-
-            <!-- 学習時間 -->
-            <div class="cell time-cell">
-              <div class="learning-time-box">
-                <span class="learning-time-text"
-                      th:text="${d.learningTime} ?: (${d['learning_time']} ?: 0)">0</span>
-                <div class="learning-time-dropdown">
-                  <button type="button" class="time-up" aria-label="増やす"><div class="triangle-up"></div></button>
-                  <button type="button" class="time-down" aria-label="減らす"><div class="triangle-down"></div></button>
-                </div>
+            <!-- タイトル行：DBの category_name を見出しに -->
+            <div class="category-row title-row">
+              <div class="category-title-box">
+                <span class="category-title-text" th:text="${c.categoryName}">カテゴリ</span>
               </div>
+              <th:block th:with="m=${selectedMonth != null ? selectedMonth : (param.month != null ? param.month[0] : null)}">
+                <a class="add-item-btn"
+                   th:href="@{/skill/new(month=${m}, categoryId=${c.id})}">
+                  項目を追加する
+                </a>
+              </th:block>
             </div>
 
-            <!-- 保存 / 削除 -->
-            <div class="cell save-cell">
-              <button class="btn-save" type="button">学習時間を保存する</button>
-            </div>
-            <div class="cell delete-cell">
-              <button class="btn-delete" type="button">削除する</button>
-            </div>
-          </div><!-- /.item-row -->
-        </div><!-- /.items-list -->
-      </div><!-- /.items-panel -->
+            <div class="items-panel">
+              <div class="items-controls">
+                <div class="control-box">項目名</div>
+                <div class="control-box">学習時間</div>
+              </div>
 
-    </div><!-- /.category-content -->
-  </section><!-- /.category-box -->
-</section><!-- /.categories-grid -->
-      
+              <!-- list が null/空でも枠は出し、行は描画されないだけ -->
+              <div class="items-list">
+                <div class="item-row" th:each="d : ${list}" th:attr="data-id=${d.id}">
+                  <!-- 項目名 -->
+                  <div class="cell name-cell">
+                    <span class="item-text" th:text="${d.item}">-</span>
+                  </div>
+
+                  <!-- 学習時間 -->
+                  <div class="cell time-cell">
+                    <div class="learning-time-box">
+                      <span class="learning-time-text"
+                            th:text="${d.learningTime} ?: (${d['learning_time']} ?: 0)">0</span>
+                      <div class="learning-time-dropdown">
+                        <button type="button" class="time-up" aria-label="増やす"><div class="triangle-up"></div></button>
+                        <button type="button" class="time-down" aria-label="減らす"><div class="triangle-down"></div></button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 保存 / 削除 -->
+                  <div class="cell save-cell">
+                    <button class="btn-save" type="button">学習時間を保存する</button>
+                  </div>
+                  <div class="cell delete-cell">
+                    <button class="btn-delete" type="button">削除する</button>
+                  </div>
+                </div><!-- /.item-row -->
+              </div><!-- /.items-list -->
+            </div><!-- /.items-panel -->
+
+          </div><!-- /.category-content -->
+        </section><!-- /.category-box -->
+      </section><!-- /.categories-grid -->
+
+      <!-- 送信用の hidden フォーム（見た目影響なし） -->
+      <form id="timeUpdateForm" th:action="@{/skill/time}" method="post" hidden>
+        <input type="hidden" name="id" id="timeUpdateId" />
+        <input type="hidden" name="learningTime" id="timeUpdateValue" />
+        <input type="hidden" name="month" id="timeUpdateMonth" th:value="${selectedMonth}" />
+        <!-- Security 使用時のみ（あるなら） -->
+        <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+      </form>
+
+      <!-- 保存完了モーダル（/skill/new と同系統） -->
+      <div class="modal fade modal-success" id="editDoneModal" tabindex="-1" aria-hidden="true"
+           data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-body text-center">
+              <p class="modal-success__msg">
+                <span class="msg-row">
+                  <span class="msg-strong" th:text="${savedItem}">項目名</span>
+                  の学習時間を保存しました！
+                </span>
+              </p>
+            </div>
+             <div class="modal-footer justify-content-center">
+              <a class="modal-success__btn" th:href="@{/skill/edit(month=${month})}">
+                編集ページに戻る
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
 
     </main>
 
     <!-- フッター -->
     <footer th:replace="common/footer :: footer"></footer>
-
   </div>
 
+  <!-- 月プルダウン & 保存送信（IIFEでまとめてバグ防止） -->
   <script>
-    (() => {
-      const dd = document.querySelector('.month-dd');
-      if (!dd) return;
+  (() => {
+    const dd     = document.querySelector('.month-dd');
+    if (dd) {
       const toggle = dd.querySelector('.month-toggle');
-      const menu = dd.querySelector('.month-menu');
+      const menu   = dd.querySelector('.month-menu');
       const hidden = document.getElementById('monthHidden');
-      const form = document.getElementById('monthForm');
-    
+      const form   = document.getElementById('monthForm');
+
+      // 開閉
       toggle.addEventListener('click', () => {
         const open = toggle.getAttribute('aria-expanded') === 'true';
         toggle.setAttribute('aria-expanded', String(!open));
@@ -142,7 +173,8 @@
           first && first.focus();
         }
       });
-    
+
+      // 選択
       menu.addEventListener('click', (e) => {
         const btn = e.target.closest('.month-item');
         if (!btn) return;
@@ -153,14 +185,8 @@
         toggle.setAttribute('aria-expanded','false');
         form.submit();
       });
-    
-      document.addEventListener('click', (e) => {
-        if (!dd.contains(e.target)) {
-          menu.hidden = true;
-          toggle.setAttribute('aria-expanded','false');
-        }
-      });
-    
+
+      // キーボード
       dd.addEventListener('keydown', (e) => {
         const items = Array.from(menu.querySelectorAll('.month-item'));
         const idx = items.indexOf(document.activeElement);
@@ -178,28 +204,63 @@
           document.activeElement.click();
         }
       });
-    })();
+    }
+
+    // 「学習時間を保存する」→ hidden フォーム送信
+    document.addEventListener('click', function(e){
+      const saveBtn = e.target.closest('.btn-save');
+      if (!saveBtn) return;
+
+      const row = saveBtn.closest('.item-row');
+      if (!row) return;
+
+      const id    = row.dataset.id;
+      const label = row.querySelector('.learning-time-text');
+      const month = document.getElementById('monthHidden')?.value || '';
+
+      let val = parseInt(label?.textContent || '0', 10);
+      if (Number.isNaN(val)) val = 0;
+
+      const postForm = document.getElementById('timeUpdateForm');
+      document.getElementById('timeUpdateId').value    = id;
+      document.getElementById('timeUpdateValue').value = String(val);
+      document.getElementById('timeUpdateMonth').value = month;
+
+      postForm.submit();
+    });
+  })();
   </script>
+
+  <!-- 保存完了フラグでモーダル起動（フラッシュ属性から） -->
+  <script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+      const saved = /*[[${saved}]]*/ false;
+      if (saved) {
+        const m = new bootstrap.Modal(document.getElementById('editDoneModal'));
+        m.show();
+      }
+    });
+  </script>
+
+  <!-- 三角で学習時間の増減（見た目は既存のまま） -->
   <script>
     document.addEventListener('click', function (e) {
-      // 三角（またはその内側）をクリックしたか？
       const isUp = e.target.closest('.triangle-up');
       const isDown = e.target.closest('.triangle-down');
       if (!isUp && !isDown) return;
-  
-      // 対象行のボックスと表示ラベルを取得
+
       const box = e.target.closest('.learning-time-box');
       if (!box) return;
-  
+
       const label = box.querySelector('.learning-time-text');
       if (!label) return;
-  
+
       let val = parseInt(label.textContent || '0', 10);
       if (Number.isNaN(val)) val = 0;
-  
+
       if (isUp)   val += 1;
       if (isDown) val = Math.max(0, val - 1); // 0未満にしない
-  
+
       label.textContent = val;
     });
   </script>
