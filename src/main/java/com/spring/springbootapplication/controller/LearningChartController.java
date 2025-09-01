@@ -86,6 +86,7 @@ public class LearningChartController {
         model.addAttribute("byCat", byCat);
         model.addAttribute("learningDataList", dataList);
         model.addAttribute("selectedMonth", month);
+        model.addAttribute("month", month); 
         model.addAttribute("selectedMonthLabel", selectedMonthLabel);
         model.addAttribute("selectedMonthNumber", selectedMonthNumber);
         model.addAttribute("availableMonths", availableMonths);
