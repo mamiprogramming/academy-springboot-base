@@ -41,6 +41,7 @@ public class SkillItemController {
         form.setLearningMonth(month);
         form.setCategoryId(categoryId); 
         model.addAttribute("selectedMonth", month);
+        model.addAttribute("month", month);
         model.addAttribute("isLoginPage", false);
         model.addAttribute("categoryName", categoryService.getNameById(categoryId));
         return "skill_new";
@@ -77,6 +78,7 @@ public class SkillItemController {
             model.addAttribute("isLoginPage", false);
             // ★ エラーで戻すときも再セット（これを忘れると null になります）
             model.addAttribute("categoryName", categoryService.getNameById(form.getCategoryId()));
+            model.addAttribute("month", form.getLearningMonth());
             return "skill_new";
         }
 
