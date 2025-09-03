@@ -61,4 +61,12 @@ public interface LearningDataMapper {
     int updateLearningTime(@Param("id") int id,
                            @Param("userId") int userId,
                            @Param("learningTime") int learningTime);
+    
+    // 削除
+    @Delete("""
+        DELETE FROM learning_data
+        WHERE id = #{id}
+          AND user_id = #{userId}
+    """)
+    int deleteByIdAndUserId(@Param("id") int id, @Param("userId") int userId);
 }

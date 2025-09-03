@@ -133,13 +133,13 @@
             <div class="modal-body text-center">
               <p class="modal-success__msg">
                 <span class="msg-row">
-                  <span class="msg-strong" th:text="${savedItem}">項目名</span>
+                  <span class="msg-strong" th:text="${savedItemName}">項目名</span>
                   の学習時間を保存しました！
                 </span>
               </p>
             </div>
              <div class="modal-footer justify-content-center">
-              <a class="modal-success__btn" th:href="@{/skill/edit(month=${month})}">
+              <a class="modal-success__btn" th:href="@{/skill/edit(month=${selectedMonth})}">
                 編集ページに戻る
               </a>
             </div>
@@ -147,6 +147,34 @@
         </div>
       </div>
 
+      <!-- 項目削除POST用（/skill/delete） -->
+      <form id="itemDeleteForm" th:action="@{/skill/delete}" method="post" hidden>
+        <input type="hidden" name="id" id="deleteId" />
+        <input type="hidden" name="month" id="deleteMonth" th:value="${selectedMonth}" />
+        <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+      </form>
+
+      <!-- 削除完了モーダル -->
+      <div class="modal fade modal-success" id="deleteDoneModal" tabindex="-1" aria-hidden="true"
+           data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-body text-center">
+              <p class="modal-success__msg">
+                <span class="msg-row">
+                  <span class="msg-strong" th:text="${deletedItemName}">項目名</span>
+                  を削除しました！
+                </span>
+              </p>
+            </div>
+            <div class="modal-footer justify-content-center">
+              <a class="modal-success__btn" th:href="@{/skill/edit(month=${selectedMonth})}">
+                編集ページに戻る
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
 
     <!-- フッター -->
@@ -234,10 +262,16 @@
   <!-- 保存完了フラグでモーダル起動（フラッシュ属性から） -->
   <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', function () {
-      const saved = /*[[${saved}]]*/ false;
+      const saved = /*[[${updateSaved}]]*/ false;
       if (saved) {
         const m = new bootstrap.Modal(document.getElementById('editDoneModal'));
         m.show();
+      }
+      // ▼ 削除完了フラグでモーダル表示
+      const deleteDone = /*[[${deleteDone}]]*/ false;
+      if (deleteDone) {
+        const m2 = new bootstrap.Modal(document.getElementById('deleteDoneModal'));
+        m2.show();
       }
     });
   </script>
@@ -245,8 +279,8 @@
   <!-- 三角で学習時間の増減（見た目は既存のまま） -->
   <script>
     document.addEventListener('click', function (e) {
-      const isUp = e.target.closest('.triangle-up');
-      const isDown = e.target.closest('.triangle-down');
+      const isUp = e.target.closest('.triangle-up, .time-up');
+      const isDown = e.target.closest('.triangle-down, .time-down');
       if (!isUp && !isDown) return;
 
       const box = e.target.closest('.learning-time-box');
@@ -264,5 +298,25 @@
       label.textContent = val;
     });
   </script>
+
+  <script>
+    // 「削除する」→ hidden フォーム送信
+    document.addEventListener('click', function(e){
+      const delBtn = e.target.closest('.btn-delete');
+      if (!delBtn) return;
+
+      const row = delBtn.closest('.item-row');
+      if (!row) return;
+
+      const id    = row.dataset.id;
+      const month = document.getElementById('monthHidden')?.value || '';
+
+      document.getElementById('deleteId').value    = id;
+      document.getElementById('deleteMonth').value = month;
+
+      document.getElementById('itemDeleteForm').submit();
+    });
+  </script>
+
 </body>
 </html>
