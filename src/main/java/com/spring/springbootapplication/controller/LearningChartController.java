@@ -123,14 +123,37 @@ public class LearningChartController {
         learningDataMapper.updateLearningTime(form.getId(), current.getId(), form.getLearningTime());
 
         // モーダル用フラッシュ属性
-        ra.addFlashAttribute("saved", true);
-        ra.addFlashAttribute("savedItem", data.getItem());
+        ra.addFlashAttribute("updateSaved", true);
+        ra.addFlashAttribute("savedItemName", data.getItem());
         ra.addFlashAttribute("savedTime", form.getLearningTime());
         ra.addFlashAttribute("categoryName", categoryService.getNameById(data.getCategoryId()));
         ra.addFlashAttribute("month", form.getMonth());
 
         // 一覧へ戻る（GETで saved を拾ってモーダル表示）
         ra.addAttribute("month", form.getMonth());
+        return "redirect:/skill/edit";
+    }
+
+    /** 削除 */
+    @PostMapping("/skill/delete")
+    public String deleteItem(@RequestParam("id") int id,
+                             @RequestParam("month") String month,
+                             HttpSession session,
+                             RedirectAttributes ra) {
+        User user = userService.getCurrentUser(session);
+        if (user == null) return "redirect:/login";
+
+        // 所有者チェック → 削除
+        LearningData data = learningDataMapper.findByIdAndUserId(id, user.getId());
+        if (data != null) {
+            learningDataMapper.deleteByIdAndUserId(id, user.getId());
+            // HTMLのフラッシュ参照に合わせる
+            ra.addFlashAttribute("deleteDone", true);
+            ra.addFlashAttribute("deletedItemName", data.getItem());
+        }
+
+        // 同じ月に戻る
+        ra.addAttribute("month", month);
         return "redirect:/skill/edit";
     }
 }
