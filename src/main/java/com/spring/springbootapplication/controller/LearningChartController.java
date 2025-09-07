@@ -19,9 +19,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import com.spring.springbootapplication.dto.MonthCategoryTotal;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import static java.util.stream.Collectors.groupingBy;
 
@@ -92,6 +93,55 @@ public class LearningChartController {
         model.addAttribute("availableMonths", availableMonths);
         model.addAttribute("availableMonthsLabel", availableMonthsLabel);
         model.addAttribute("isLoginPage", false);
+
+        /* --- チャート用データ --- */
+
+        // 選択月から直近3か月（先々月, 先月, 今月）
+        YearMonth selectedYM = YearMonth.parse(month);
+        List<String> monthsForChart = List.of(
+                selectedYM.minusMonths(2).toString(),
+                selectedYM.minusMonths(1).toString(),
+                selectedYM.toString()
+        );
+
+        // 表示ラベル（例: "6月","7月","8月"）
+        DateTimeFormatter jp = DateTimeFormatter.ofPattern("M月");
+        List<String> chartLabels = monthsForChart.stream()
+                .map(m -> YearMonth.parse(m).format(jp))
+                .toList();
+
+        // 月×カテゴリ合計（INT厳守：Mapperは LEAST(SUM(...),2147483647)::int）
+        List<MonthCategoryTotal> rows =
+                learningDataMapper.sumByUserAndMonths(loginUser.getId(), monthsForChart);
+
+        // 0埋めグリッド（1:BE, 2:FE, 3:Infra）
+        Map<String, Map<Integer, Integer>> grid = new HashMap<>();
+        for (String m : monthsForChart) {
+            grid.put(m, new HashMap<>(Map.of(1, 0, 2, 0, 3, 0)));
+        }
+        for (MonthCategoryTotal r : rows) {
+            grid.get(r.getLearningMonth()).put(r.getCategoryId(), r.getTotal());
+        }
+
+        // データセットとY最大値（最低100、10刻み切り上げ）
+        List<Integer> be = new ArrayList<>(), fe = new ArrayList<>(), infra = new ArrayList<>();
+        int maxVal = 0;
+        for (String m : monthsForChart) {
+            int v1 = grid.get(m).getOrDefault(1, 0);
+            int v2 = grid.get(m).getOrDefault(2, 0);
+            int v3 = grid.get(m).getOrDefault(3, 0);
+            be.add(v1); fe.add(v2); infra.add(v3);
+            maxVal = Math.max(maxVal, Math.max(v1, Math.max(v2, v3)));
+        }
+        int yMax = Math.max(100, maxVal);
+        yMax = ((int) Math.ceil(yMax / 10.0)) * 10;
+
+        // Viewへ（Chart.js が読む属性名）
+        model.addAttribute("chartLabels", chartLabels);
+        model.addAttribute("datasetBackend", be);
+        model.addAttribute("datasetFrontend", fe);
+        model.addAttribute("datasetInfra", infra);
+        model.addAttribute("chartYMax", yMax);
 
         return "skill_edit";
     }
