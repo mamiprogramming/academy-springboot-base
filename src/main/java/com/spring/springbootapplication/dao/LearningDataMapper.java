@@ -1,5 +1,6 @@
 package com.spring.springbootapplication.dao;
 
+import com.spring.springbootapplication.dto.MonthCategoryTotal;
 import com.spring.springbootapplication.entity.LearningData;
 import org.apache.ibatis.annotations.*;
 
@@ -69,4 +70,22 @@ public interface LearningDataMapper {
           AND user_id = #{userId}
     """)
     int deleteByIdAndUserId(@Param("id") int id, @Param("userId") int userId);
+
+    @Select("""
+    <script>
+    SELECT
+      learning_month  AS learningMonth,
+      category_id     AS categoryId,
+      SUM(learning_time) AS total
+    FROM learning_data
+    WHERE user_id = #{userId}
+      AND learning_month IN
+      <foreach collection="months" item="m" open="(" separator="," close=")">
+        #{m}
+      </foreach>
+    GROUP BY learning_month, category_id
+    </script>
+    """)
+    List<MonthCategoryTotal> sumByUserAndMonths(@Param("userId") int userId,
+                                            @Param("months") List<String> months);
 }

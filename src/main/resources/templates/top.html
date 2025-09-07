@@ -48,22 +48,131 @@
             <button class="button_blue edit-button" onclick="location.href='/profile/edit'">
               自己紹介を編集する
             </button>
-
-            <!-- 学習チャート -->
-            <div class="learning-chart-box">
-              <div class="learning-chart-inner-box">
-                <div class="learning-chart-title-box">
-                  <p>学習チャート</p>
-                </div>
-                <button class="button_blue edit-learning-chart-button" onclick="location.href='/skill/edit'">
-                  編集する
-                </button>
-              </div>
-            </div>
-
           </div> <!-- profile-right-box -->
         </div> <!-- profile-intro -->
       </div> <!-- profile-content -->
+
+      <!-- 学習チャート -->
+      <div class="learning-chart-box">
+        <div class="learning-chart-inner-box">
+          <div class="learning-chart-title-box">
+            <p>学習チャート</p>
+          </div>
+          <button class="button_blue edit-learning-chart-button" onclick="location.href='/skill/edit'">
+            編集する
+          </button>
+        </div>
+        <section id="skill-section">
+          <div id="skillChartWrap">
+            <canvas id="skillChart" width="1081" height="475"></canvas>
+          </div>
+        </section>
+                
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+        <script th:inline="javascript">
+          (function () {
+            const run = function () {
+              const el = document.getElementById('skillChart');
+              if (!el) { console.error('#skillChart が見つかりません'); return; }
+        
+              //  必要コンポーネントを明示登録（UMDでは必須）
+              const { CategoryScale, LinearScale, BarController, BarElement, Legend, Title, Tooltip } = Chart;
+              Chart.register(CategoryScale, LinearScale, BarController, BarElement, Legend, Title, Tooltip);
+
+              //  CSS変数 → Chart.defaults へ反映
+              const cs = getComputedStyle(document.documentElement);
+              Chart.defaults.font.family      = (cs.getPropertyValue('--chart-font-family') || 'Roboto, sans-serif').trim();
+              Chart.defaults.font.weight      = parseInt(cs.getPropertyValue('--chart-font-weight')) || 400;
+              Chart.defaults.font.size        = parseInt(cs.getPropertyValue('--chart-font-size')) || 14;
+              Chart.defaults.font.lineHeight  = parseFloat(cs.getPropertyValue('--chart-line-height')) || 1.43;
+              Chart.defaults.color            = (cs.getPropertyValue('--chart-font-color') || '#000').trim();
+
+              const legendSize = parseInt(cs.getPropertyValue('--chart-legend-font-size')) || 12;
+              const yTickSize  = parseInt(cs.getPropertyValue('--chart-y-tick-font-size')) || 8;
+              const tickLH     = parseFloat(cs.getPropertyValue('--chart-tick-line-height')) || 1.3;
+        
+              // Thymeleaf 値（未定義でも []）
+              let labels    = /*[[${chartLabels}]]*/ [];
+              let beData    = /*[[${datasetBackend}]]*/ [];
+              let feData    = /*[[${datasetFrontend}]]*/ [];
+              let infraData = /*[[${datasetInfra}]]*/ [];
+        
+              // ラベルが空は描画不可 → デフォルト補填
+              if (!Array.isArray(labels) || labels.length === 0) labels = ['先々月','先月','今月'];
+        
+              // // 表示用ラベルは固定（ここに配列長を合わせる）
+              const labelsForDisplay = ['先々月','先月','今月'];
+              const L = labelsForDisplay.length;
+              const fit = (arr) => {
+                const a = Array.isArray(arr) ? arr.slice(0, L) : [];
+                while (a.length < L) a.push(0);
+                return a.map(v => Number.isFinite(+v) ? +v : 0);
+              };
+              beData    = fit(beData);
+              feData    = fit(feData);
+              infraData = fit(infraData);
+        
+              //  Y軸：最低100、10刻み、100超は10の倍数に切上げ
+              const maxData = Math.max(0, ...beData, ...feData, ...infraData);
+              const yMax    = Math.max(100, Math.ceil(maxData / 10) * 10);
+        
+              //  既存チャートがあれば破棄（再描画の安全策）
+              const old = Chart.getChart(el);
+              if (old) old.destroy();
+        
+              //  非レスポンシブで“確実表示”（出たら responsive:true へ戻してOK）
+              const chart = new Chart(el, {
+                type: 'bar',
+                data: {
+                  labels: labelsForDisplay,
+                  datasets: [
+                    { label: 'バックエンド',  data: beData,    backgroundColor: 'rgba(255, 99, 132, 0.4)', borderWidth: 0, categoryPercentage: 0.60, barPercentage: 0.75 },
+                    { label: 'フロントエンド', data: feData,    backgroundColor: 'rgba(255, 159, 64, 0.4)', borderWidth: 0, categoryPercentage: 0.60, barPercentage: 0.75 },
+                    { label: 'インフラ',       data: infraData, backgroundColor: 'rgba(255, 205, 86, 0.4)', borderWidth: 0, categoryPercentage: 0.60, barPercentage: 0.75 }
+                  ]
+                },
+                options: {
+                  responsive: false,
+                  layout: { padding: { left: 45, right: 45 } }, // ← 左右に20pxの内側余白
+                  plugins: {
+                    legend: {
+                      position: 'top',
+                      labels: {
+                        font: { size: legendSize, family: Chart.defaults.font.family, weight: Chart.defaults.font.weight, lineHeight: tickLH }  // ← 凡例の文字だけ小さく（数値で指定）
+                      },
+                      onClick: (e) => {},       
+                      onHover: (e) => { e.native.target.style.cursor = 'default'; },
+                      onLeave: (e) => { e.native.target.style.cursor = 'default'; }
+                  },
+                  title: { display: false }
+                },
+                scales: {
+                  x: { type: 'category', stacked: false, offset: true }, // ← エッジにカテゴリ半分の余白
+                  y: {
+                    type: 'linear',
+                    beginAtZero: true,
+                    max: yMax,
+                    ticks: {
+                      stepSize: 10,
+                      // ← Y軸だけ小さく
+                      font: { size: yTickSize, weight: 700, family: Chart.defaults.font.family, weight: Chart.defaults.font.weight, lineHeight: tickLH }
+                    }
+                  }
+                }
+              } 
+            });
+        
+              chart.update();
+              };
+        
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', run, { once: true });
+            } else {
+              run();
+            }
+          })();
+        </script>
+      </div>
     </main>
 
     <!-- フッター -->

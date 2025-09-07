@@ -7,7 +7,17 @@
 </head>
 <body>
   <footer th:fragment="footer" class="footer-custom">
-    <small th:text="${loginUser != null} ? ${loginUser.name} : 'portfolio site'">portfolio site</small>
+
+    <!-- ログイン中 -->
+    <small th:if="${session != null and session.loginUser != null}">
+      <span th:text="${session.loginUser.name}">ユーザー名</span>
+    </small>
+  
+    <!-- 未ログイン -->
+    <small th:if="${session == null or session.loginUser == null}">
+      portfolio site
+    </small>
+  
   </footer>
 </body>
 </html>

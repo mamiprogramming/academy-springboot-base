@@ -19,13 +19,24 @@ html, body {
   width: 100vw;
   box-sizing: border-box;
   overflow-x: hidden; /* はみ出さない */
+  flex-wrap: nowrap; 
 }
 
 .navbar-brand-custom {
   font-weight: 700;
   font-size: 36px;
   line-height: 1;
-  color: #FFFFFF;
+  color: #FFFFFF !important; 
+  text-decoration: none;
+  padding: 6px 8px; /* ヒットエリア拡大 */
+  white-space: nowrap; 
+}
+.navbar-brand-custom,
+.navbar-brand-custom:visited,
+.navbar-brand-custom:hover,
+.navbar-brand-custom:active,
+.navbar-brand-custom:focus {
+  color: inherit;
   text-decoration: none;
 }
 
@@ -330,6 +341,7 @@ form button.login-button {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  z-index: 1; 
 }
 
 /* 自己紹介見出し（左上） */
@@ -443,41 +455,67 @@ button.button_blue.edit-button:hover {
   line-height: 1.2;  /* 適度な行間 */
 }
 
+/* ========== トップページ：学習チャートセクション ========== */
+
 /* 学習チャート全体ボックス */
 .learning-chart-box {
-  position: static;
-  top: 480px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 960px;
-  height: 331px;
-  margin-top: 120px;
+  width: 100%;
+  margin: 120px auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;          /* 中央寄せの決め手（子要素を中央に） */
+  position: relative;   /* 追加 */
+  z-index: 2;           /* 追加：チャート側を前面へ */
 }
 
 /* タイトル＋ボタンの親ボックス */
 .learning-chart-inner-box {
   width: 400px;
-  height: 151px; /* 指定の高さ */
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 縦中央揃え */
-  align-items: center;     /* 横中央揃え */
+  align-items: center;
   gap: 8px;
-  box-sizing: border-box;
 }
 
 /* タイトルボックス */
 .learning-chart-title-box {
-  width: 400px;
+  width: 100%;                  /* ← inner-box の幅(400px)いっぱいに下線 */
   height: 58px;
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  gap: 16px;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 2px solid rgba(0,0,0,0.5);
+  padding-bottom: 16px;
   box-sizing: border-box;
-  padding-bottom: 16px;  
+}
+
+/* Chart 見た目の変数（ここを変えれば全体が反映） */
+:root{
+  --chart-font-family: 'Roboto', sans-serif;
+  --chart-font-weight: 400;      /* Regular */
+  --chart-font-size: 14;         /* px（数値のみ） */
+  --chart-line-height: 1.43;     /* 14px→20px相当（20/14=1.43） */
+  --chart-font-color: #000000;
+
+  --chart-legend-font-size: 12;
+  --chart-y-tick-font-size: 8;
+  --chart-tick-line-height: 1.3;
+}
+
+/* 図のフレーム （1081×532.5 で中央固定） */
+#skillChartWrap {
+  width: 1081px;
+  height: 475px;
+  margin: 90px auto 0;
+  box-sizing: border-box; 
+}
+
+/* キャンバス */
+#skillChart {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 /* タイトルテキスト */
@@ -486,9 +524,9 @@ button.button_blue.edit-button:hover {
   font-weight: 700;
   font-size: 36px;
   line-height: 100%;
-  letter-spacing: 0%;
+  letter-spacing: 0;
   margin: 0;
-  color: rgba(0, 0, 0, 0.75);
+  color: #000000;
 }
 
 /* 編集ボタン */
@@ -517,7 +555,6 @@ button.button_blue.edit-button:hover {
 .edit-learning-chart-button:hover {
   background-color: #144a63;
 }
-
 
 /* ========== 自己紹介編集ページ ========== */
 
