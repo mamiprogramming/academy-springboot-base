@@ -2,7 +2,17 @@
 <header th:fragment="header">
   <nav class="navbar-custom"
        th:classappend="${isLoginPage != null and isLoginPage} ? ' justify-content-center' : ' justify-content-between'">
-    <div class="navbar-brand-custom">My Portfolio</div>
+     <!-- ブランド：ログイン画面では非リンク、その他はトップへリンク -->
+    <th:block th:if="${isLoginPage != null and isLoginPage}">
+      <span class="navbar-brand-custom">
+        <span class="brand-text">My Portfolio</span>
+      </span>
+    </th:block>
+    <th:block th:if="${isLoginPage == null or !isLoginPage}">
+      <a class="navbar-brand-custom" th:href="@{/}" title="トップページへ">
+        <span class="brand-text">My Portfolio</span>
+      </a>
+    </th:block>
 
     <!-- ログインページではログイン・ログアウトボタン非表示 -->
     <th:block th:if="${isLoginPage != null and !isLoginPage}">

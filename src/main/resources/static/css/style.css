@@ -19,13 +19,24 @@ html, body {
   width: 100vw;
   box-sizing: border-box;
   overflow-x: hidden; /* はみ出さない */
+  flex-wrap: nowrap; 
 }
 
 .navbar-brand-custom {
   font-weight: 700;
   font-size: 36px;
   line-height: 1;
-  color: #FFFFFF;
+  color: #FFFFFF !important; 
+  text-decoration: none;
+  padding: 6px 8px; /* ヒットエリア拡大 */
+  white-space: nowrap; 
+}
+.navbar-brand-custom,
+.navbar-brand-custom:visited,
+.navbar-brand-custom:hover,
+.navbar-brand-custom:active,
+.navbar-brand-custom:focus {
+  color: inherit;
   text-decoration: none;
 }
 
