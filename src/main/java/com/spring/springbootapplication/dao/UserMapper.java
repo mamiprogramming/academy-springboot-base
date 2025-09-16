@@ -3,6 +3,7 @@ package com.spring.springbootapplication.dao;
 import com.spring.springbootapplication.entity.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -10,6 +11,7 @@ import org.apache.ibatis.annotations.Update;
 public interface UserMapper {
 
     @Insert("INSERT INTO users (name, email, password) VALUES (#{name}, #{email}, #{password})")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id") // ★追加
     void insertUser(User user);
 
     @Select("SELECT id, name, email, password, bio, image, image_data AS imageData FROM users WHERE email = #{email}")
