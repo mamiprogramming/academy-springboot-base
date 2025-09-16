@@ -34,6 +34,11 @@ public class TopController {
             return "redirect:/login";
         }
 
+        // ★ 追記：id が null の場合はここで弾く（NPEの根本を遮断）
+        if (user.getId() == null) {
+            return "redirect:/login";
+        }
+
         model.addAttribute("loginUser", user);
         model.addAttribute("profileName", user.getName());
         model.addAttribute("bio", user.getBio());

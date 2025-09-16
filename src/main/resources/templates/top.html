@@ -29,7 +29,16 @@
         <div class="profile-intro">
           <!-- プロフィール画像 -->
           <div class="profile-image-wrapper">
-            <img th:src="@{/profile/image}" alt="プロフィール画像" />
+            <!-- 画像あり：img を表示（alt は有効） -->
+            <img th:if="${hasImageData}"
+                 class="profile-img"
+                 th:src="@{/profile/image}"
+                 alt="プロフィール画像" />
+
+            <!-- 画像なし：グレーのブロックのみ表示（テキストは出さない） -->
+            <div th:if="${!hasImageData}"
+                 class="profile-img placeholder"
+                 aria-hidden="true"></div>
           </div>
 
           <!-- 名前 -->

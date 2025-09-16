@@ -22,7 +22,16 @@ public class UserService {
      * @return ログインユーザーオブジェクト（無ければnull）
      */
     public User getCurrentUser(HttpSession session) {
-        return (User) session.getAttribute("loginUser");
+        if (session == null) return null;
+        Object o = session.getAttribute("loginUser");
+        if (!(o instanceof User u)) return null;
+        return (u.getId() == null) ? null : u;  // id 未設定も未ログイン扱い
+    }
+
+    // 追加：int に触る前にnullを弾くための補助メソッド（オートアンボクシング事故防止）
+    public Integer getCurrentUserId(HttpSession session) {
+        User u = getCurrentUser(session);
+        return (u != null) ? u.getId() : null;
     }
 
     /**
