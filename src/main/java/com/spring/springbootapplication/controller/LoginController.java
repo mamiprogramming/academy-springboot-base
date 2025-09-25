@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class LoginController {
@@ -33,13 +34,16 @@ public class LoginController {
             @Valid @ModelAttribute("loginForm") LoginForm loginForm,
             BindingResult bindingResult,
             HttpSession session,
-            Model model) {
+            Model model,
+            RedirectAttributes ra) {
 
         model.addAttribute("isLoginPage", true);
 
         // バリデーションエラーがあればログイン画面に戻す
         if (bindingResult.hasErrors()) {
-            return "login";
+            ra.addFlashAttribute("errorMessage", "メールアドレス、もしくはパスワードが間違っています");
+            ra.addFlashAttribute("loginForm", loginForm);   // ★ 丸ごと保持
+            return "redirect:/login";
         }
 
         // 入力が正常ならユーザー検索
@@ -47,13 +51,21 @@ public class LoginController {
 
         // ユーザーが存在しない、またはパスワード不一致
         if (user == null || !user.getPassword().equals(loginForm.getPassword())) {
-            model.addAttribute("errorMessage", "メールアドレスまたはパスワードが正しくありません");
-            return "login";
+            ra.addFlashAttribute("errorMessage", "メールアドレス、もしくはパスワードが間違っています");
+            ra.addFlashAttribute("loginForm", loginForm);
+            return "redirect:/login";
         }
 
         // ログイン成功時：セッションにユーザーを保存
         session.setAttribute("loginUser", user);
         System.out.println("ログイン成功: " + user.getEmail());// ログイン成功時：セッションにユーザーを保存
         return "redirect:/top";
+    }
+
+    private LoginForm keepEmailOnly(LoginForm src) {
+        LoginForm lf = new LoginForm();
+        lf.setEmail(src.getEmail());
+        // password は入れない
+        return lf;
     }
 }
