@@ -12,7 +12,9 @@
     <div class="container" style="max-width: 480px;">
       <h2 class="register-title mb-5">ログイン</h2>
       <form th:action="@{/login}" th:object="${loginForm}" method="post">
-        <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
+        <div th:if="${not #strings.isEmpty(errorMessage)}"
+             class="error-message"
+             th:text="${errorMessage}"></div>
 
         <div class="mb-5">
           <label class="form-label" for="email">メールアドレス</label>
