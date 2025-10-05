@@ -26,7 +26,7 @@
           <!-- 自己紹介 -->
           <label for="bio" class="form-label">自己紹介文</label>
           <textarea id="bio" th:field="*{bio}" class="form-control" rows="5"></textarea>
-          <div class="form-text text-muted" style="white-space: nowrap;">
+          <div class="form-text text-muted">
             50文字以上、200文字以下で入力してください
           </div>
           <div th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}" class="text-danger mt-1"></div>
