@@ -832,7 +832,7 @@ button.submit-button:hover {
 
   /* 上右下左 */
   padding-top: 8px;
-  padding-right: 20px;  /* 三角分の余白 */
+  padding-right: 28px;  /* 三角分の余白 */
   padding-bottom: 8px;
   padding-left: 0;   
 
@@ -861,7 +861,7 @@ button.submit-button:hover {
   content: "";
   position: absolute;
   top: 50%;
-  right: 18px; /* 少し左へ寄せる */
+  right: 14px; /* 少し左へ寄せる */
   transform: translateY(-50%);
 
   width: 12.124px;
@@ -872,9 +872,10 @@ button.submit-button:hover {
 }
 
 /* 数字 */
-.month-toggle .num {
-  font-size: 24px;
+.month-toggle .num,
+.month-item .num {
   font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1; /* Safari/Fallback用の保険 */
 }
 
 /* 開いたリスト（3ヶ月分） */
@@ -882,7 +883,7 @@ button.submit-button:hover {
   position: absolute;
   left: 0;
   top: calc(100% + 4px);
-  width: 94px;                 /* ボタンと同幅に */
+  min-width: 94px;                 /* ボタンと同幅に */
   margin: 0;
   padding: 8px 0;              /* 上下8px、左右は各行で */
   list-style: none;            /* ドット消す */
